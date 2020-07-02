@@ -32,13 +32,14 @@
 	<string name="turn_on">On</string>
 	<string name="turn_off">Off</string>
 	<string name="title_led_state">LED</string>
-	<string name="title_button_state">Button</string>
-	<string name="state">State</string>
+	<string name="title_button_state">Battery</string>
+	<string name="state">Voltage [V]</string>
 	<string name="button_pressed">Pressed</string>
 	<string name="button_released">Released</string>
-	<string name="button_unknown">Unknown</string>
-	<string name="led_summary">Toggle the switch to turn the LED 3 on or off.</string>
-	<string name="button_summary">Press Button 1 on the dev kit.</string>
+<!--	> <string name="button_unknown">Unknown</string> <!-->
+	<string name="voltage_unknown">Unknown</string>
+	<string name="led_summary">Toggle the switch to turn the BMS LEDs on or off.</string>
+	<string name="button_summary">Display the Battery Voltage</string>
 
 	<string name="location_permission_title">LOCATION PERMISSION REQUIRED</string>
 	<string name="location_permission_info">From Android 6.0 Marshmallow onwards the application requires Location permission in order to scan for Bluetooth Low Energy devices.

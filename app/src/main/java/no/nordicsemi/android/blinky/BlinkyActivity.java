@@ -126,7 +126,7 @@ public class BlinkyActivity extends AppCompatActivity {
 		led.setEnabled(connected);
 		if (!connected) {
 			led.setChecked(false);
-			buttonState.setText(R.string.button_unknown);
+			buttonState.setText(R.string.voltage_unknown);
 		}
 	}
 }
