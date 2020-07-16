@@ -113,8 +113,11 @@ public class BlinkyActivity extends AppCompatActivity {
 			led.setChecked(isOn);
 		});
 		viewModel.getButtonState().observe(this,
-				pressed -> buttonState.setText(pressed ?
-						R.string.button_pressed : R.string.button_released));
+				pressed -> {
+					buttonState.setText(pressed.toString());
+					//buttonState.setText(pressed ? R.string.button_pressed : R.string.button_released);
+				});
+		//pressed -> buttonState.setText(pressed ? R.string.button_pressed : R.string.button_released));
 	}
 
 	@OnClick(R.id.action_clear_cache)

@@ -23,6 +23,8 @@
 package no.nordicsemi.android.blinky.profile.callback;
 
 import android.bluetooth.BluetoothDevice;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
@@ -35,18 +37,25 @@ public abstract class BlinkyButtonDataCallback implements ProfileDataCallback, B
 
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-        if (data.size() != 1) {
+        if (data.size() != 2) {
             onInvalidDataReceived(device, data);
+            Log.d("myTag", "wrong Size");
             return;
         }
-
-        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
-        if (state == STATE_PRESSED) {
-            onButtonStateChanged(device, true);
-        } else if (state == STATE_RELEASED) {
-            onButtonStateChanged(device, false);
-        } else {
-            onInvalidDataReceived(device, data);
+        final int state = data.getIntValue(Data.FORMAT_UINT16, 0);
+        if(state == 0)
+        {
+            Log.d("myTag", "receive 0");
         }
+        onButtonStateChanged(device, state);
+//        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
+//        if (state == STATE_PRESSED) {
+//            onButtonStateChanged(device, true);
+//        } else if (state == STATE_RELEASED) {
+//            onButtonStateChanged(device, false);
+//        }
+//         else {
+//            onInvalidDataReceived(device, data);
+//        }
     }
 }

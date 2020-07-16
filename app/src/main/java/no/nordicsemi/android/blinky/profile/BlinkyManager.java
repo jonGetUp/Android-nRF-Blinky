@@ -54,7 +54,7 @@ public class BlinkyManager extends ObservableBleManager {
 	private final static UUID LBS_UUID_LED_CHAR = UUID.fromString("00001525-1212-efde-1523-785feabcd123");
 
 	private final MutableLiveData<Boolean> ledState = new MutableLiveData<>();
-	private final MutableLiveData<Boolean> buttonState = new MutableLiveData<>();
+	private final MutableLiveData<Integer> buttonState = new MutableLiveData<>();
 
 	private BluetoothGattCharacteristic buttonCharacteristic, ledCharacteristic;
 	private LogSession logSession;
@@ -69,7 +69,8 @@ public class BlinkyManager extends ObservableBleManager {
 		return ledState;
 	}
 
-	public final LiveData<Boolean> getButtonState() {
+	//public final LiveData<Boolean> getButtonState() {
+	public final LiveData<Integer> getButtonState() {
 		return buttonState;
 	}
 
@@ -109,9 +110,12 @@ public class BlinkyManager extends ObservableBleManager {
 	 */
 	private	final BlinkyButtonDataCallback buttonCallback = new BlinkyButtonDataCallback() {
 		@Override
+//		public void onButtonStateChanged(@NonNull final BluetoothDevice device,
+//										 final boolean pressed) {
+//			log(LogContract.Log.Level.APPLICATION, "Button " + (pressed ? "pressed" : "released"));
+//			buttonState.setValue(pressed);
 		public void onButtonStateChanged(@NonNull final BluetoothDevice device,
-										 final boolean pressed) {
-			log(LogContract.Log.Level.APPLICATION, "Button " + (pressed ? "pressed" : "released"));
+										 final Integer pressed) {
 			buttonState.setValue(pressed);
 		}
 
