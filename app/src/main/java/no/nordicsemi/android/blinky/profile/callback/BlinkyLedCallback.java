@@ -34,5 +34,5 @@ public interface BlinkyLedCallback {
      * @param device the target device.
      * @param on true when LED was enabled, false when disabled.
      */
-    void onLedStateChanged(@NonNull final BluetoothDevice device, final boolean on);
+    void onLedStateChanged(@NonNull final BluetoothDevice device, final Integer on);    //to change
 }

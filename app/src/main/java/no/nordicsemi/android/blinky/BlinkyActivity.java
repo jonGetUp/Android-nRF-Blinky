@@ -108,10 +108,10 @@ public class BlinkyActivity extends AppCompatActivity {
 					break;
 			}
 		});
-		viewModel.getLedState().observe(this, isOn -> {
-			ledState.setText(isOn ? R.string.turn_on : R.string.turn_off);
-			led.setChecked(isOn);
-		});
+//		viewModel.getLedState().observe(this, isOn -> {
+//			ledState.setText(isOn ? R.string.turn_on : R.string.turn_off);
+//			led.setChecked(isOn);
+//		});
 		viewModel.getButtonState().observe(this,
 				pressed -> {
 					buttonState.setText(pressed.toString());

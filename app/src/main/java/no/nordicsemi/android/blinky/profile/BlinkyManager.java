@@ -53,19 +53,19 @@ public class BlinkyManager extends ObservableBleManager {
 	/** LED characteristic UUID. */
 	private final static UUID LBS_UUID_LED_CHAR = UUID.fromString("00001525-1212-efde-1523-785feabcd123");
 
-	private final MutableLiveData<Boolean> ledState = new MutableLiveData<>();
+	private final MutableLiveData<Integer> ledState = new MutableLiveData<>();	//to change
 	private final MutableLiveData<Integer> buttonState = new MutableLiveData<>();
 
 	private BluetoothGattCharacteristic buttonCharacteristic, ledCharacteristic;
 	private LogSession logSession;
 	private boolean supported;
-	private boolean ledOn;
+	private Integer ledOn;	//to change
 
 	public BlinkyManager(@NonNull final Context context) {
 		super(context);
 	}
 
-	public final LiveData<Boolean> getLedState() {
+	public final LiveData<Integer> getLedState() {	//to change
 		return ledState;
 	}
 
@@ -140,9 +140,9 @@ public class BlinkyManager extends ObservableBleManager {
 	private final BlinkyLedDataCallback ledCallback = new BlinkyLedDataCallback() {
 		@Override
 		public void onLedStateChanged(@NonNull final BluetoothDevice device,
-									  final boolean on) {
+									  final Integer on) {	//to change
 			ledOn = on;
-			log(LogContract.Log.Level.APPLICATION, "LED " + (on ? "ON" : "OFF"));
+			//log(LogContract.Log.Level.APPLICATION, "LED " + (on ? "ON" : "OFF"));
 			ledState.setValue(on);
 		}
 
@@ -196,7 +196,7 @@ public class BlinkyManager extends ObservableBleManager {
 	 *
 	 * @param on true to turn the LED on, false to turn it off.
 	 */
-	public void turnLed(final boolean on) {
+	public void turnLed(final Integer on) {	//to change
 		// Are we connected?
 		if (ledCharacteristic == null)
 			return;
@@ -205,7 +205,7 @@ public class BlinkyManager extends ObservableBleManager {
 		if (ledOn == on)
 			return;
 
-		log(Log.VERBOSE, "Turning LED " + (on ? "ON" : "OFF") + "...");
+		//log(Log.VERBOSE, "Turning LED " + (on ? "ON" : "OFF") + "...");
 		writeCharacteristic(ledCharacteristic,
 				on ? BlinkyLED.turnOn() : BlinkyLED.turnOff())
 				.with(ledCallback).enqueue();

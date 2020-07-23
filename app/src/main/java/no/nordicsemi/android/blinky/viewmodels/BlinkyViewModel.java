@@ -55,7 +55,7 @@ public class BlinkyViewModel extends AndroidViewModel {
 		return blinkyManager.getButtonState();
 	}
 
-	public LiveData<Boolean> getLedState() {
+	public LiveData<Integer> getLedState() {	//to change
 		return blinkyManager.getLedState();
 	}
 

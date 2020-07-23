@@ -52,9 +52,9 @@ public abstract class BlinkyLedDataCallback implements ProfileDataCallback, Data
 
         final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
         if (state == STATE_ON) {
-            onLedStateChanged(device, true);
+            onLedStateChanged(device, 0xCAFECAFE);    //to change
         } else if (state == STATE_OFF) {
-            onLedStateChanged(device, false);
+            onLedStateChanged(device, 0xF00DF00D);   //to change
         } else {
             onInvalidDataReceived(device, data);
         }

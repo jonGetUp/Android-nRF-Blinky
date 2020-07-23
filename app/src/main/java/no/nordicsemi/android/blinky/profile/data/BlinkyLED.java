@@ -29,6 +29,8 @@ import no.nordicsemi.android.ble.data.Data;
 public final class BlinkyLED {
     private static final byte STATE_OFF = 0x00;
     private static final byte STATE_ON = 0x01;
+//    private static final Integer STATE_OFF = 0x00000000;
+//    private static final Integer STATE_ON =  0x01020304;
 
     @NonNull
     public static Data turnOn() {
