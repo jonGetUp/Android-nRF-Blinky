@@ -50,15 +50,6 @@ public class BlinkyViewModel extends AndroidViewModel {
 		return blinkyManager.getState();
 	}
 
-	//public LiveData<Boolean> getButtonState() {
-	public LiveData<Integer> getButtonState() {
-		return blinkyManager.getButtonState();
-	}
-
-	public LiveData<Boolean> getLedState() {
-		return blinkyManager.getLedState();
-	}
-
 	/**
 	 * Connect to the given peripheral.
 	 *
@@ -97,6 +88,30 @@ public class BlinkyViewModel extends AndroidViewModel {
 		blinkyManager.disconnect().enqueue();
 	}
 
+	@Override
+	protected void onCleared() {
+		super.onCleared();
+		if (blinkyManager.isConnected()) {
+			disconnect();
+		}
+	}
+
+	/** Characteristics - Get() *******************************************************************/
+	//public LiveData<Boolean> getButtonState() {
+	public LiveData<Integer> getButtonState() {
+		return blinkyManager.getButtonState();
+	}
+
+	public LiveData<Boolean> getLedState() {
+		return blinkyManager.getLedState();
+	}
+
+	public LiveData<Integer> getSerialNumber() {
+		return blinkyManager.getSerialNumber();
+	}
+
+
+	/** Characteristics - Set() *******************************************************************/
 	/**
 	 * Sends a command to turn ON or OFF the LED on the nRF5 DK.
 	 *
@@ -106,11 +121,11 @@ public class BlinkyViewModel extends AndroidViewModel {
 		blinkyManager.turnLed(on);
 	}
 
-	@Override
-	protected void onCleared() {
-		super.onCleared();
-		if (blinkyManager.isConnected()) {
-			disconnect();
-		}
+	public void setSerialNumber(final Integer sn) {
+		blinkyManager.setSerialNumber(sn);
 	}
+
+
+
+
 }

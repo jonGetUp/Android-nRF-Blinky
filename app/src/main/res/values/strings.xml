@@ -33,12 +33,11 @@
 	<string name="turn_off">Off</string>
 	<string name="title_led_state">LED</string>
 	<string name="title_button_state">Battery</string>
-	<string name="state">Voltage [V]</string>
+	<string name="battery_unit">Voltage [V]</string>
 	<string name="button_pressed">Pressed</string>
 	<string name="button_released">Released</string>
-<!--	> <string name="button_unknown">Unknown</string> <!-->
-	<string name="voltage_unknown">Unknown</string>
-	<string name="led_summary">Toggle the switch to turn the BMS LEDs on or off.</string>
+	<string name="unknown">Unknown</string>
+	<string name="led_summary">Unknown</string>
 	<string name="button_summary">Display the Battery Voltage</string>
 
 	<string name="location_permission_title">LOCATION PERMISSION REQUIRED</string>
@@ -66,4 +65,7 @@
 
 	<string name="state_connecting">Connecting…</string>
 	<string name="state_initializing">Initializing…</string>
+	<string name="title_serial_number">Serial number</string>
+	<string name="serial_number_summary">Unique device serial number (hexa)</string>
+	<string name="serial_number_btn_send">SEND</string>
 </resources>
