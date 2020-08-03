@@ -49,11 +49,11 @@ import no.nordicsemi.android.log.Logger;
 
 public class BlinkyManager extends ObservableBleManager {
 	/** Nordic Blinky Service UUID. */
-	public final static UUID LBS_UUID_SERVICE = UUID.fromString("00001523-1212-efde-1523-785feabcd123");
+	public final static UUID LBS_UUID_SERVICE = UUID.fromString("00000001-1212-efde-1523-785feabcd123");
 	/** BUTTON characteristic UUID. */
-	private final static UUID LBS_UUID_BUTTON_CHAR = UUID.fromString("00001524-1212-efde-1523-785feabcd123");
+	private final static UUID LBS_UUID_BUTTON_CHAR = UUID.fromString("00000002-1212-efde-1523-785feabcd123");
 	/** LED characteristic UUID. */
-	private final static UUID LBS_UUID_LED_CHAR = UUID.fromString("00001525-1212-efde-1523-785feabcd123");
+	private final static UUID LBS_UUID_LED_CHAR = UUID.fromString("00000003-1212-efde-1523-785feabcd123");
 	/** Serial Number characteristic UUID. */
 	private final static UUID BLE_UUID_SERIAL_NUMBER_CHAR = UUID.fromString("0000CAFE-1212-efde-1523-785feabcd123");
 
