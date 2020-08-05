@@ -55,7 +55,7 @@ public class BlinkyManager extends ObservableBleManager {
 	/** LED characteristic UUID. */
 	private final static UUID LBS_UUID_LED_CHAR = UUID.fromString("00000003-1212-efde-1523-785feabcd123");
 	/** Serial Number characteristic UUID. */
-	private final static UUID BLE_UUID_SERIAL_NUMBER_CHAR = UUID.fromString("0000CAFE-1212-efde-1523-785feabcd123");
+	private final static UUID BLE_UUID_SERIAL_NUMBER_CHAR = UUID.fromString("00000004-1212-efde-1523-785feabcd123");
 
 	//LiveData : data holder class that can be observed within a given lifecycle.
 	//Observer will be notified about modifications of the wrapped data only if the paired LifecycleOwner is in active state
@@ -204,19 +204,19 @@ public class BlinkyManager extends ObservableBleManager {
 		// MTU or write some initial data. Do it here.
 		@Override
 		protected void initialize() {
+			/**Notification write from master**/
 			//Sets the asynchronous data callback that will be called whenever a notification or an indication is received on given characteristic.
 			setNotificationCallback(buttonCharacteristic).with(buttonCallback);
-			//setNotificationCallback(serialNumberCharacteristic).with(serialNumberCallback);
+			setNotificationCallback(serialNumberCharacteristic).with(serialNumberCallback);
 
-			//Read characteristic
-			readCharacteristic(ledCharacteristic).with(ledCallback).enqueue();	//Sends a read request to the given characteristic.
-
+			//Read characteristics
 			readCharacteristic(buttonCharacteristic).with(buttonCallback).enqueue();
+			readCharacteristic(ledCharacteristic).with(ledCallback).enqueue();	//Sends a read request to the given characteristic.
 			readCharacteristic(serialNumberCharacteristic).with(serialNumberCallback).enqueue();
 
 			//Enable char notification
 			enableNotifications(buttonCharacteristic).enqueue();
-			//enableNotifications(serialNumberCharacteristic).enqueue();
+			enableNotifications(serialNumberCharacteristic).enqueue();
 		}
 
 		// This method will be called when the device is connected and services are discovered.
@@ -231,7 +231,12 @@ public class BlinkyManager extends ObservableBleManager {
 				serialNumberCharacteristic = service.getCharacteristic(BLE_UUID_SERIAL_NUMBER_CHAR);
 			}
 
-			// Validate properties, check if we can write on the characteristics
+			// Validate properties, check if we can write on the characteristics, or it notify
+			boolean notify = false;
+			if (serialNumberCharacteristic != null) {
+				final int properties = serialNumberCharacteristic.getProperties();
+				notify = (properties & BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0;
+			}
 			boolean writeRequest = false;
 			if (ledCharacteristic != null) {
 				final int rxProperties = ledCharacteristic.getProperties();
@@ -240,8 +245,10 @@ public class BlinkyManager extends ObservableBleManager {
 			if (serialNumberCharacteristic != null) {
 				final int rxProperties = serialNumberCharacteristic.getProperties();
 				writeRequest = (rxProperties & BluetoothGattCharacteristic.PROPERTY_WRITE) > 0;
+				//serialNumberCharacteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
 			}
-			supported = buttonCharacteristic != null && ledCharacteristic != null && serialNumberCharacteristic != null && writeRequest;
+			// Return true if all required services have been found
+			supported = buttonCharacteristic != null && ledCharacteristic != null && serialNumberCharacteristic != null && writeRequest && notify;
 			return supported;
 		}
 

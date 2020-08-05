@@ -47,19 +47,10 @@ public abstract class EBikeSerialNumberDataCallback implements ProfileDataCallba
 
     private void parse(@NonNull final BluetoothDevice device, @NonNull final Data data) {
         if (data.size() <= 16) {
-            final int sn = data.getIntValue(Data.FORMAT_UINT16, 0);
+            final int sn = data.getIntValue(Data.FORMAT_UINT32, 0);
             onSerialNumberChanged(device, sn);
         }else{
             onInvalidDataReceived(device, data);
         }
-
-//        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
-//        if (state == STATE_ON) {
-//            onLedStateChanged(device, true);
-//        } else if (state == STATE_OFF) {
-//            onLedStateChanged(device, false);
-//        } else {
-//
-//        }
     }
 }
