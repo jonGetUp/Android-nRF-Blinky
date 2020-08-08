@@ -39,9 +39,9 @@ import java.util.UUID;
 
 import no.nordicsemi.android.ble.data.Data;
 import no.nordicsemi.android.ble.livedata.ObservableBleManager;
-import no.nordicsemi.android.blinky.profile.callback.BlinkyButtonDataCallback;
-import no.nordicsemi.android.blinky.profile.callback.BlinkyLedDataCallback;
-import no.nordicsemi.android.blinky.profile.callback.EBikeSerialNumberDataCallback;
+import no.nordicsemi.android.blinky.profile.callback.batVoltDataCallback;
+import no.nordicsemi.android.blinky.profile.callback.unblockSmDataCallback;
+import no.nordicsemi.android.blinky.profile.callback.serialNumberDataCallback;
 import no.nordicsemi.android.blinky.profile.data.BlinkyLED;
 import no.nordicsemi.android.log.LogContract;
 import no.nordicsemi.android.log.LogSession;
@@ -49,50 +49,93 @@ import no.nordicsemi.android.log.Logger;
 
 public class BlinkyManager extends ObservableBleManager {
 	/** Nordic Blinky Service UUID. */
-	public final static UUID LBS_UUID_SERVICE = UUID.fromString("00000001-1212-efde-1523-785feabcd123");
+	public final static UUID EBIKE_S_UUID_SERVICE = UUID.fromString("00000001-1212-efde-1523-785feabcd123");
 	/** BUTTON characteristic UUID. */
-	private final static UUID LBS_UUID_BUTTON_CHAR = UUID.fromString("00000002-1212-efde-1523-785feabcd123");
+	private final static UUID EBIKE_S_UUID_BATVOLT_CHAR = UUID.fromString("00000002-1212-efde-1523-785feabcd123");
 	/** LED characteristic UUID. */
-	private final static UUID LBS_UUID_LED_CHAR = UUID.fromString("00000003-1212-efde-1523-785feabcd123");
+	private final static UUID EBIKE_S_UUID_UNBLOCK_SM_CHAR = UUID.fromString("00000003-1212-efde-1523-785feabcd123");
 	/** Serial Number characteristic UUID. */
-	private final static UUID BLE_UUID_SERIAL_NUMBER_CHAR = UUID.fromString("00000004-1212-efde-1523-785feabcd123");
+	private final static UUID EBIKE_S_UUID_SERIAL_NUMBER_CHAR = UUID.fromString("00000004-1212-efde-1523-785feabcd123");
+	//>>>>>>>>>> Add other UUIDs
 
 	//LiveData : data holder class that can be observed within a given lifecycle.
 	//Observer will be notified about modifications of the wrapped data only if the paired LifecycleOwner is in active state
-	private final MutableLiveData<Boolean> ledState = new MutableLiveData<>();
-	private final MutableLiveData<Integer> buttonState = new MutableLiveData<>();
-	private final MutableLiveData<Integer> serialNumber = new MutableLiveData<>();
+	private final MutableLiveData<Boolean> unblockSm_ld = new MutableLiveData<>();
+	private final MutableLiveData<Integer> batVolt_ld = new MutableLiveData<>();
+	private final MutableLiveData<Integer> serialNumber_ld = new MutableLiveData<>();
+	//>>>>>>>>>> Add other LiveData
 
 	// Client characteristics
-	private BluetoothGattCharacteristic buttonCharacteristic, ledCharacteristic, serialNumberCharacteristic;
+	private BluetoothGattCharacteristic batVolt_char, unblockSm_char, serialNumber_char;
 	private LogSession logSession;
 	private boolean supported;
-	private boolean ledOn;
-	private Integer serialNumber_tmp;
+
+	//Old value for WRITE & READ char, avoid rewrite same value
+	private boolean unblockSm_old;
+	private Integer serialNumber_old;
+	//>>>>>>>>>> Add other WRITE & READ
 
 	public BlinkyManager(@NonNull final Context context) {
 		super(context);
 	}
 
-	public final LiveData<Boolean> getLedState() {
-		return ledState;
+	 /** GET() Live data characteristics **********************************************************/
+	public final LiveData<Boolean> getUnblockSm_ld() {
+		return unblockSm_ld;
 	}
+	public final LiveData<Integer> getBatVolt_ld() {
+		return batVolt_ld;
+	}
+	public final LiveData<Integer> getSerialNumber_ld() {
+		return serialNumber_ld;
+	}
+	//>>>>>>>>>> Add other getter()
 
-	//public final LiveData<Boolean> getButtonState() {
-	public final LiveData<Integer> getButtonState() {
-		return buttonState;
-	}
+	 /** SET() Live data characteristics **********************************************************/
+	/**
+	 * Sends a request to the device to set unblockSm on or off.
+	 *
+	 * @param on true or false
+	 */
+	public void setUnblockSm_ld(final boolean on) {
+		// Are we connected?
+		if (unblockSm_char == null)
+			return;
 
-	public final LiveData<Integer> getSerialNumber() {
-		return serialNumber;
+		// No need to change?
+		if (unblockSm_old == on)
+			return;
+
+		log(Log.VERBOSE, "unblockSm " + (on ? "ON" : "OFF") + "...");
+		writeCharacteristic(unblockSm_char,
+				on ? BlinkyLED.turnOn() : BlinkyLED.turnOff()).with(unblockSmCallback).enqueue();
 	}
+	/**
+	 * Sends a request to the device to change the serial number
+	 *
+	 * @param sn serial number
+	 */
+	public void setSerialNumber_ld(final Integer sn) {
+		// Are we connected?
+		if (serialNumber_char == null)
+			return;
+
+		// No need to change?
+		if (serialNumber_old == sn)
+			return;
+
+		//convert Integer to byte[]
+		byte[] bytes = ByteBuffer.allocate(4).putInt(sn).array();
+		log(Log.VERBOSE, "SerialNumberChanged: " + sn);
+		writeCharacteristic(serialNumber_char,	bytes).with(unblockSmCallback).enqueue();
+	}
+	//>>>>>>>>>> Add other setter()
 
 	@NonNull
 	@Override
 	protected BleManagerGattCallback getGattCallback() {
-		return new BlinkyBleManagerGattCallback();
+		return new EBikeBleManagerGattCallback();
 	}
-
 	/**
 	 * Sets the log session to be used for low level logging.
 	 * @param session the session, or null, if nRF Logger is not installed.
@@ -112,26 +155,22 @@ public class BlinkyManager extends ObservableBleManager {
 		return !supported;
 	}
 
+	/** CALLBACK **********************************************************************************/
 	/**
-	 * The Button callback will be notified when a notification from Button characteristic
+	 * The batVolt callback will be notified when a notification from batVolt characteristic
 	 * has been received, or its data was read.
 	 * <p>
-	 * If the data received are valid (single byte equal to 0x00 or 0x01), the
-	 * {@link BlinkyButtonDataCallback#onButtonStateChanged} will be called.
-	 * Otherwise, the {@link BlinkyButtonDataCallback#onInvalidDataReceived(BluetoothDevice, Data)}
+	 * If the data received are valid , the
+	 * {@link batVoltDataCallback#onBatVoltChanged} will be called.
+	 * Otherwise, the {@link batVoltDataCallback#onInvalidDataReceived(BluetoothDevice, Data)}
 	 * will be called with the data received.
 	 */
-	private	final BlinkyButtonDataCallback buttonCallback = new BlinkyButtonDataCallback() {
+	private	final batVoltDataCallback batVoltCallback = new batVoltDataCallback() {
 		@Override
-//		public void onButtonStateChanged(@NonNull final BluetoothDevice device,
-//										 final boolean pressed) {
-//			log(LogContract.Log.Level.APPLICATION, "Button " + (pressed ? "pressed" : "released"));
-//			buttonState.setValue(pressed);
-		public void onButtonStateChanged(@NonNull final BluetoothDevice device,
-										 final Integer pressed) {
-			buttonState.setValue(pressed);
+		public void onBatVoltChanged(@NonNull final BluetoothDevice device,
+									 final Integer batVolt) {
+			batVolt_ld.setValue(batVolt);
 		}
-
 		@Override
 		public void onInvalidDataReceived(@NonNull final BluetoothDevice device,
 										  @NonNull final Data data) {
@@ -140,23 +179,23 @@ public class BlinkyManager extends ObservableBleManager {
 	};
 
 	/**
-	 * The LED callback will be notified when the LED state was read or sent to the target device.
+	 * The unblockSm callback will be notified when the unblockSm state was read or sent to the target device.
 	 * <p>
 	 * This callback implements both {@link no.nordicsemi.android.ble.callback.DataReceivedCallback}
 	 * and {@link no.nordicsemi.android.ble.callback.DataSentCallback} and calls the same
 	 * method on success.
 	 * <p>
 	 * If the data received were invalid, the
-	 * {@link BlinkyLedDataCallback#onInvalidDataReceived(BluetoothDevice, Data)} will be
+	 * {@link unblockSmDataCallback#onInvalidDataReceived(BluetoothDevice, Data)} will be
 	 * called.
 	 */
-	private final BlinkyLedDataCallback ledCallback = new BlinkyLedDataCallback() {
+	private final unblockSmDataCallback unblockSmCallback = new unblockSmDataCallback() {
 		@Override
-		public void onLedStateChanged(@NonNull final BluetoothDevice device,
-									  final boolean on) {
-			ledOn = on;
-			log(LogContract.Log.Level.APPLICATION, "LED " + (on ? "ON" : "OFF"));
-			ledState.setValue(on);
+		public void onUnblockSmStateChanged(@NonNull final BluetoothDevice device,
+											final boolean unblockSm) {
+			unblockSm_old = unblockSm;
+			log(LogContract.Log.Level.APPLICATION, "unblockSm " + (unblockSm ? "ON" : "OFF"));
+			unblockSm_ld.setValue(unblockSm);
 		}
 
 		@Override
@@ -168,22 +207,22 @@ public class BlinkyManager extends ObservableBleManager {
 	};
 
 	/**
-	 * The LED callback will be notified when the LED state was read or sent to the target device.
+	 * The serialNumber callback will be notified when the serialNumber state was read or sent to the target device.
 	 * <p>
 	 * This callback implements both {@link no.nordicsemi.android.ble.callback.DataReceivedCallback}
 	 * and {@link no.nordicsemi.android.ble.callback.DataSentCallback} and calls the same
 	 * method on success.
 	 * <p>
 	 * If the data received were invalid, the
-	 * {@link BlinkyLedDataCallback#onInvalidDataReceived(BluetoothDevice, Data)} will be
+	 * {@link unblockSmDataCallback#onInvalidDataReceived(BluetoothDevice, Data)} will be
 	 * called.
 	 */
-	private final EBikeSerialNumberDataCallback serialNumberCallback = new EBikeSerialNumberDataCallback() {
+	private final serialNumberDataCallback serialNumberCallback = new serialNumberDataCallback() {
 		@Override
 		public void onSerialNumberChanged(@NonNull final BluetoothDevice device,
 									  final Integer sn) {
-			serialNumber_tmp = sn;		//save a local value to compare if it change
-			serialNumber.setValue(sn);	//change the live data value -> observer will be notified
+			serialNumber_old = sn;			//save a local value to compare if it change
+			serialNumber_ld.setValue(sn);	//change the live data value -> observer will be notified
 		}
 
 		@Override
@@ -193,112 +232,77 @@ public class BlinkyManager extends ObservableBleManager {
 			log(Log.WARN, "Invalid data received: " + data);
 		}
 	};
-
+	//>>>>>>>>>> Add other callBack Interface Override
 
 	/**
 	 * BluetoothGatt callbacks object.
 	 */
-	private class BlinkyBleManagerGattCallback extends BleManagerGattCallback {
+	private class EBikeBleManagerGattCallback extends BleManagerGattCallback {
 
-		// Initialize your device here. Often you need to enable notifications and set required
+		// Initialize your device here. Often youD need to enable notifications and set required
 		// MTU or write some initial data. Do it here.
 		@Override
 		protected void initialize() {
-			/**Notification write from master**/
+			/**Notification for all READ characteristics**/
+			//>>>>>>>>>> Add other Notifications
 			//Sets the asynchronous data callback that will be called whenever a notification or an indication is received on given characteristic.
-			setNotificationCallback(buttonCharacteristic).with(buttonCallback);
-			setNotificationCallback(serialNumberCharacteristic).with(serialNumberCallback);
+			setNotificationCallback(batVolt_char).with(batVoltCallback);
+			setNotificationCallback(serialNumber_char).with(serialNumberCallback);
+			setNotificationCallback(unblockSm_char).with(unblockSmCallback);
 
 			//Read characteristics
-			readCharacteristic(buttonCharacteristic).with(buttonCallback).enqueue();
-			readCharacteristic(ledCharacteristic).with(ledCallback).enqueue();	//Sends a read request to the given characteristic.
-			readCharacteristic(serialNumberCharacteristic).with(serialNumberCallback).enqueue();
+			readCharacteristic(batVolt_char).with(batVoltCallback).enqueue();
+			readCharacteristic(unblockSm_char).with(unblockSmCallback).enqueue();	//Sends a read request to the given characteristic.
+			readCharacteristic(serialNumber_char).with(serialNumberCallback).enqueue();
 
 			//Enable char notification
-			enableNotifications(buttonCharacteristic).enqueue();
-			enableNotifications(serialNumberCharacteristic).enqueue();
+			enableNotifications(batVolt_char).enqueue();
+			enableNotifications(serialNumber_char).enqueue();
+			enableNotifications(unblockSm_char).enqueue();
 		}
 
-		// This method will be called when the device is connected and services are discovered.
-		// You need to obtain references to the characteristics and descriptors that you will use.
-		// Return true if all required services are found, false otherwise.
+		/** This method will be called when the device is connected and services are discovered.
+		 *  You need to obtain references to the characteristics and descriptors that you will use.
+		 *  Return true if all required services are found, false otherwise.*/
 		@Override
 		public boolean isRequiredServiceSupported(@NonNull final BluetoothGatt gatt) {
-			final BluetoothGattService service = gatt.getService(LBS_UUID_SERVICE);
+			final BluetoothGattService service = gatt.getService(EBIKE_S_UUID_SERVICE);
 			if (service != null) {
-				buttonCharacteristic = service.getCharacteristic(LBS_UUID_BUTTON_CHAR);
-				ledCharacteristic = service.getCharacteristic(LBS_UUID_LED_CHAR);
-				serialNumberCharacteristic = service.getCharacteristic(BLE_UUID_SERIAL_NUMBER_CHAR);
+				batVolt_char = service.getCharacteristic(EBIKE_S_UUID_BATVOLT_CHAR);
+				unblockSm_char = service.getCharacteristic(EBIKE_S_UUID_UNBLOCK_SM_CHAR);
+				serialNumber_char = service.getCharacteristic(EBIKE_S_UUID_SERIAL_NUMBER_CHAR);
+				//>>>>>>>>>> Add other char
 			}
 
 			// Validate properties, check if we can write on the characteristics, or it notify
 			boolean notify = false;
-			if (serialNumberCharacteristic != null) {
-				final int properties = serialNumberCharacteristic.getProperties();
+			if (serialNumber_char != null) {
+				final int properties = serialNumber_char.getProperties();
 				notify = (properties & BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0;
 			}
 			boolean writeRequest = false;
-			if (ledCharacteristic != null) {
-				final int rxProperties = ledCharacteristic.getProperties();
+			if (unblockSm_char != null) {
+				final int rxProperties = unblockSm_char.getProperties();
 				writeRequest = (rxProperties & BluetoothGattCharacteristic.PROPERTY_WRITE) > 0;
 			}
-			if (serialNumberCharacteristic != null) {
-				final int rxProperties = serialNumberCharacteristic.getProperties();
+			if (serialNumber_char != null) {
+				final int rxProperties = serialNumber_char.getProperties();
 				writeRequest = (rxProperties & BluetoothGattCharacteristic.PROPERTY_WRITE) > 0;
 				//serialNumberCharacteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
 			}
+			//>>>>>>>>>> Add other Tests
 			// Return true if all required services have been found
-			supported = buttonCharacteristic != null && ledCharacteristic != null && serialNumberCharacteristic != null && writeRequest && notify;
+			supported = batVolt_char != null && unblockSm_char != null && serialNumber_char != null && writeRequest && notify;
 			return supported;
 		}
 
 		@Override
 		protected void onDeviceDisconnected() {
 			// Device disconnected. Release your references here.
-			buttonCharacteristic = null;
-			ledCharacteristic = null;
-			serialNumberCharacteristic = null;
+			batVolt_char = null;
+			unblockSm_char = null;
+			serialNumber_char = null;
+			//>>>>>>>>>> Add other dereferences
 		}
-	}
-
-	/**
-	 * Sends a request to the device to turn the LED on or off.
-	 *
-	 * @param on true to turn the LED on, false to turn it off.
-	 */
-	public void turnLed(final boolean on) {
-		// Are we connected?
-		if (ledCharacteristic == null)
-			return;
-
-		// No need to change?
-		if (ledOn == on)
-			return;
-
-		log(Log.VERBOSE, "Turning LED " + (on ? "ON" : "OFF") + "...");
-		writeCharacteristic(ledCharacteristic,
-				on ? BlinkyLED.turnOn() : BlinkyLED.turnOff())
-				.with(ledCallback).enqueue();
-	}
-
-	/**
-	 * Sends a request to the device to change the serial number
-	 *
-	 * @param sn true to turn the LED on, false to turn it off.
-	 */
-	public void setSerialNumber(final Integer sn) {
-		// Are we connected?
-		if (serialNumberCharacteristic == null)
-			return;
-
-		// No need to change?
-		if (serialNumber_tmp == sn)
-			return;
-
-		//convert Integer to byte[]
-		byte[] bytes = ByteBuffer.allocate(4).putInt(sn).array();
-		log(Log.VERBOSE, "SerialNumberChanged: " + sn);
-		writeCharacteristic(serialNumberCharacteristic,	bytes)
-				.with(ledCallback).enqueue();
 	}
 }

@@ -41,7 +41,6 @@ public class BlinkyViewModel extends AndroidViewModel {
 
 	public BlinkyViewModel(@NonNull final Application application) {
 		super(application);
-
 		// Initialize the manager.
 		blinkyManager = new BlinkyManager(getApplication());
 	}
@@ -98,18 +97,16 @@ public class BlinkyViewModel extends AndroidViewModel {
 
 	/** Characteristics - Get() *******************************************************************/
 	//public LiveData<Boolean> getButtonState() {
-	public LiveData<Integer> getButtonState() {
-		return blinkyManager.getButtonState();
+	public LiveData<Integer> getBatVolt() {
+		return blinkyManager.getBatVolt_ld();
 	}
-
-	public LiveData<Boolean> getLedState() {
-		return blinkyManager.getLedState();
+	public LiveData<Boolean> getUnblockSm() {
+		return blinkyManager.getUnblockSm_ld();
 	}
-
 	public LiveData<Integer> getSerialNumber() {
-		return blinkyManager.getSerialNumber();
+		return blinkyManager.getSerialNumber_ld();
 	}
-
+	//>>>>>>>>>> Add other get() char
 
 	/** Characteristics - Set() *******************************************************************/
 	/**
@@ -117,13 +114,13 @@ public class BlinkyViewModel extends AndroidViewModel {
 	 *
 	 * @param on true to turn the LED on, false to turn it OFF.
 	 */
-	public void setLedState(final boolean on) {
-		blinkyManager.turnLed(on);
+	public void setUnblockSm(final boolean on) {
+		blinkyManager.setUnblockSm_ld(on);
 	}
-
 	public void setSerialNumber(final Integer sn) {
-		blinkyManager.setSerialNumber(sn);
+		blinkyManager.setSerialNumber_ld(sn);
 	}
+	//>>>>>>>>>> Add other set() char
 
 
 

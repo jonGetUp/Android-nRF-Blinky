@@ -48,11 +48,13 @@ public class BlinkyActivity extends AppCompatActivity {
 	private BlinkyViewModel viewModel;
 
 	//Bind a field to the view
-	@BindView(R.id.led_switch) SwitchMaterial led;
-	@BindView(R.id.battery_state) TextView buttonState;
-	@BindView(R.id.serial_number_txt) TextView serialNumberTxt;
-	@BindView(R.id.serial_number_btn_send) TextView serialNumberBtnSend;
+	@BindView(R.id.unblockSm_switch) SwitchMaterial unblockSm_switch;
+	@BindView(R.id.batVolt_txt) TextView batVolt_txt;
+	@BindView(R.id.serialNumber_txt) TextView serialNumber_txt;
+	@BindView(R.id.serialNumber_btn) TextView serialNumber_btn;
+	//>>>>>>>>>> Add other elements
 
+	/** onCreate **********************************************************************************/
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,22 +72,26 @@ public class BlinkyActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		// Configure the view model, get the BlinkyViewModel
+		/** view Model - Init *********************************************************************/
+		// Configure the view model, get the EBike ViewModel
 		viewModel = new ViewModelProvider(this).get(BlinkyViewModel.class);
 		viewModel.connect(device);
 
 		// Set up views.
-		final TextView ledState = findViewById(R.id.led_state);
 		final LinearLayout progressContainer = findViewById(R.id.progress_container);
 		final TextView connectionState = findViewById(R.id.connection_state);
 		final View content = findViewById(R.id.device_container);
 		final View notSupported = findViewById(R.id.not_supported);
+		final TextView unblockSmState = findViewById(R.id.unblockSm_state);
+		//>>>>>>>>>> Add other views
 
+		/** CALLBACK ON ELEMENTS EVENTS for WRITE ********************************************************************/
 		//Register a callback to be invoked when the checked state of this button changes
-		led.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.setLedState(isChecked));	//Called when the checked state of a compound button has changed.
+		unblockSm_switch.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.setUnblockSm(isChecked));	//Called when the checked state of a compound button has changed.
 		//Register a callback to be invoked when the checked state of this button changes
-		serialNumberBtnSend.setOnClickListener((v) -> viewModel.setSerialNumber(Integer.parseInt(serialNumberTxt.getText().toString())));//Called when a view has been clicked.
+		serialNumber_btn.setOnClickListener((v) -> viewModel.setSerialNumber(Integer.parseInt(serialNumber_txt.getText().toString())));//Called when a view has been clicked.
 
+		/** viewModel - GET()**********************************************************************/
 		//Implement functional interfaces of viewModel
 		viewModel.getConnectionState().observe(this, state -> {
 			switch (state.getState()) {
@@ -119,26 +125,27 @@ public class BlinkyActivity extends AppCompatActivity {
 
 		//Initialize the UI with bluetooth characteristics
 		//Get the led stats, modify the textView and switch box
-		viewModel.getLedState().observe(this, isOn -> {
-			ledState.setText(isOn ? R.string.turn_on : R.string.turn_off);
-			led.setChecked(isOn);
+		viewModel.getUnblockSm().observe(this, isOn -> {
+			unblockSmState.setText(isOn ? R.string.turn_on : R.string.turn_off);
+			unblockSm_switch.setChecked(isOn);
 			// update ui.
 		});
 
 		//Get the button state and modify the textView
-		viewModel.getButtonState().observe(this,
+		viewModel.getBatVolt().observe(this,
 				pressed -> {
-					buttonState.setText(pressed.toString());
+					batVolt_txt.setText(pressed.toString());
 					// update ui.
 				});
 
 		//Get the serialNumber and modify the textView
 		//Override the onChange method (Called when the data is changed)
-		viewModel.getSerialNumber().observe(this,	//this : MaterialButton = serial_number_btn_send
-				sn -> {										//sn : Integer, data to assign
-					serialNumberTxt.setText(sn.toString());	//override method : TextView
+		viewModel.getSerialNumber().observe(this,		//this : MaterialButton = serial_number_btn_send
+				sn -> {											//sn : Integer, data to assign
+					serialNumber_txt.setText(sn.toString());	//override method : TextView
 					// update ui.
 				});
+		//>>>>>>>>>> Add other : override of method call on viewModel.material event callback methods
 
 		//Get the serialNumber and modify the textView
 //		viewModel.getSerialNumber().observe(this, new Observer<Integer>() {
@@ -156,11 +163,12 @@ public class BlinkyActivity extends AppCompatActivity {
 	}
 
 	private void onConnectionStateChanged(final boolean connected) {
-		led.setEnabled(connected);
+		unblockSm_switch.setEnabled(connected);
 		if (!connected) {
-			led.setChecked(false);
-			buttonState.setText(R.string.unknown);
-			serialNumberTxt.setText(R.string.unknown);
+			unblockSm_switch.setChecked(false);
+			batVolt_txt.setText(R.string.unknown);
+			serialNumber_txt.setText(R.string.unknown);
+			//>>>>>>>>>> Add other default values
 		}
 	}
 }

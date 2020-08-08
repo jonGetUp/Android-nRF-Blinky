@@ -31,9 +31,7 @@ import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
 import no.nordicsemi.android.ble.data.Data;
 
 @SuppressWarnings("ConstantConditions")
-public abstract class EBikeSerialNumberDataCallback implements ProfileDataCallback, DataSentCallback, EBikeSerialNumberCallback {
-//    private static final byte STATE_OFF = 0x00;
-//    private static final byte STATE_ON = 0x01;
+public abstract class serialNumberDataCallback implements ProfileDataCallback, DataSentCallback, EBikeSerialNumberCallback {
 
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {

@@ -23,39 +23,40 @@
 package no.nordicsemi.android.blinky.profile.callback;
 
 import android.bluetooth.BluetoothDevice;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
+import no.nordicsemi.android.ble.callback.DataSentCallback;
 import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
 import no.nordicsemi.android.ble.data.Data;
 
 @SuppressWarnings("ConstantConditions")
-public abstract class BlinkyButtonDataCallback implements ProfileDataCallback, BlinkyButtonCallback {
-    private static final int STATE_RELEASED = 0x00;
-    private static final int STATE_PRESSED = 0x01;
+public abstract class unblockSmDataCallback implements ProfileDataCallback, DataSentCallback, BlinkyLedCallback {
+    private static final byte STATE_OFF = 0x00;
+    private static final byte STATE_ON = 0x01;
 
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-        if (data.size() != 2) {
+        parse(device, data);
+    }
+
+    @Override
+    public void onDataSent(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+        parse(device, data);
+    }
+
+    private void parse(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+        if (data.size() != 1) {
             onInvalidDataReceived(device, data);
-            Log.d("myTag", "wrong Size");
             return;
         }
-        final int state = data.getIntValue(Data.FORMAT_UINT16, 0);
-        if(state == 0)
-        {
-            Log.d("myTag", "receive 0");
+
+        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
+        if (state == STATE_ON) {
+            onUnblockSmStateChanged(device, true);
+        } else if (state == STATE_OFF) {
+            onUnblockSmStateChanged(device, false);
+        } else {
+            onInvalidDataReceived(device, data);
         }
-        onButtonStateChanged(device, state);
-//        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
-//        if (state == STATE_PRESSED) {
-//            onButtonStateChanged(device, true);
-//        } else if (state == STATE_RELEASED) {
-//            onButtonStateChanged(device, false);
-//        }
-//         else {
-//            onInvalidDataReceived(device, data);
-//        }
     }
 }

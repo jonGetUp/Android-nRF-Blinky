@@ -65,7 +65,7 @@
 					android:layout_height="match_parent">
 
 					<com.google.android.material.appbar.MaterialToolbar
-						android:id="@+id/led_tool_bar"
+						android:id="@+id/unblockSm_tool_bar"
 						android:layout_width="0dp"
 						android:layout_height="?actionBarSize"
 						app:layout_constraintLeft_toLeftOf="parent"
@@ -76,7 +76,7 @@
 						app:titleMarginStart="@dimen/toolbar_title_margin" />
 
 					<com.google.android.material.textview.MaterialTextView
-						android:id="@+id/led_summary"
+						android:id="@+id/unblockSm_summary"
 						android:layout_width="0dp"
 						android:layout_height="wrap_content"
 						android:paddingStart="@dimen/activity_horizontal_margin"
@@ -84,25 +84,26 @@
 						android:text="@string/led_summary"
 						android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
 						app:layout_constraintLeft_toLeftOf="parent"
-						app:layout_constraintTop_toBottomOf="@+id/led_tool_bar" />
+						app:layout_constraintTop_toBottomOf="@+id/unblockSm_tool_bar" />
 
 					<com.google.android.material.textview.MaterialTextView
-						android:id="@+id/led_state"
+						android:id="@+id/unblockSm_state"
 						android:layout_width="0dp"
 						android:layout_height="wrap_content"
+						android:layout_marginTop="8dp"
 						android:padding="@dimen/activity_horizontal_margin"
 						android:text="@string/turn_off"
 						android:textAllCaps="true"
 						android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
 						app:layout_constraintLeft_toLeftOf="parent"
-						app:layout_constraintTop_toBottomOf="@+id/led_summary" />
+						app:layout_constraintTop_toBottomOf="@+id/unblockSm_summary" />
 
 					<com.google.android.material.switchmaterial.SwitchMaterial
-						android:id="@+id/led_switch"
+						android:id="@+id/unblockSm_switch"
 						android:layout_width="0dp"
 						android:layout_height="wrap_content"
 						android:padding="@dimen/activity_horizontal_margin"
-						app:layout_constraintBaseline_toBaselineOf="@+id/led_state"
+						app:layout_constraintBaseline_toBaselineOf="@+id/unblockSm_state"
 						app:layout_constraintEnd_toEndOf="parent" />
 
 				</androidx.constraintlayout.widget.ConstraintLayout>
@@ -118,7 +119,7 @@
 					android:layout_height="match_parent">
 
 					<com.google.android.material.appbar.MaterialToolbar
-						android:id="@+id/button_tool_bar"
+						android:id="@+id/batVolt_tool_bar"
 						android:layout_width="0dp"
 						android:layout_height="?actionBarSize"
 						app:layout_constraintLeft_toLeftOf="parent"
@@ -129,7 +130,7 @@
 						app:titleMarginStart="@dimen/toolbar_title_margin" />
 
 					<com.google.android.material.textview.MaterialTextView
-						android:id="@+id/button_summary"
+						android:id="@+id/batVolt_summary"
 						android:layout_width="0dp"
 						android:layout_height="wrap_content"
 						android:paddingStart="@dimen/activity_horizontal_margin"
@@ -137,27 +138,27 @@
 						android:text="@string/button_summary"
 						android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
 						app:layout_constraintLeft_toLeftOf="parent"
-						app:layout_constraintTop_toBottomOf="@+id/button_tool_bar" />
+						app:layout_constraintTop_toBottomOf="@+id/batVolt_tool_bar" />
 
 					<com.google.android.material.textview.MaterialTextView
-						android:id="@+id/battery_unit"
+						android:id="@+id/batVolt_unit"
 						android:layout_width="0dp"
 						android:layout_height="wrap_content"
 						android:padding="@dimen/activity_horizontal_margin"
 						android:text="@string/battery_unit"
 						android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
 						app:layout_constraintLeft_toLeftOf="parent"
-						app:layout_constraintTop_toBottomOf="@+id/button_summary" />
+						app:layout_constraintTop_toBottomOf="@+id/batVolt_summary" />
 
 					<com.google.android.material.textview.MaterialTextView
-						android:id="@+id/battery_state"
+						android:id="@+id/batVolt_txt"
 						android:layout_width="0dp"
 						android:layout_height="wrap_content"
 						android:padding="@dimen/activity_horizontal_margin"
 						android:text="@string/unknown"
 						android:textAllCaps="true"
 						android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-						app:layout_constraintBaseline_toBaselineOf="@+id/battery_unit"
+						app:layout_constraintBaseline_toBaselineOf="@+id/batVolt_unit"
 						app:layout_constraintRight_toRightOf="parent" />
 				</androidx.constraintlayout.widget.ConstraintLayout>
 			</com.google.android.material.card.MaterialCardView>
@@ -173,7 +174,7 @@
 					android:layout_height="match_parent">
 
 					<com.google.android.material.appbar.MaterialToolbar
-						android:id="@+id/serial_number_tool_bar"
+						android:id="@+id/serialNumber_tool_bar"
 						android:layout_width="0dp"
 						android:layout_height="?actionBarSize"
 						app:layout_constraintLeft_toLeftOf="parent"
@@ -184,7 +185,7 @@
 						app:titleMarginStart="@dimen/toolbar_title_margin" />
 
 					<com.google.android.material.textview.MaterialTextView
-						android:id="@+id/serial_number_summary"
+						android:id="@+id/serialNumber_summary"
 						android:layout_width="0dp"
 						android:layout_height="wrap_content"
 						android:paddingStart="@dimen/activity_horizontal_margin"
@@ -192,10 +193,10 @@
 						android:text="@string/serial_number_summary"
 						android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
 						app:layout_constraintLeft_toLeftOf="parent"
-						app:layout_constraintTop_toBottomOf="@+id/serial_number_tool_bar" />
+						app:layout_constraintTop_toBottomOf="@+id/serialNumber_tool_bar" />
 
 					<EditText
-						android:id="@+id/serial_number_txt"
+						android:id="@+id/serialNumber_txt"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:ems="10"
@@ -203,14 +204,14 @@
 						android:inputType="number"
 						android:maxLength="9"
 						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toBottomOf="@+id/serial_number_summary" />
+						app:layout_constraintTop_toBottomOf="@+id/serialNumber_summary" />
 
 					<Button
-						android:id="@+id/serial_number_btn_send"
+						android:id="@+id/serialNumber_btn"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:text="@string/serial_number_btn_send"
-						app:layout_constraintBaseline_toBaselineOf="@+id/serial_number_txt"
+						app:layout_constraintBaseline_toBaselineOf="@+id/serialNumber_txt"
 						app:layout_constraintEnd_toEndOf="parent" />
 
 				</androidx.constraintlayout.widget.ConstraintLayout>
