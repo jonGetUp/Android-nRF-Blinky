@@ -34,7 +34,7 @@ import no.nordicsemi.android.ble.data.Data;
 public abstract class balanceInWorkDataCallback implements ProfileDataCallback, EbikeBalanceInWorkCallback {    //Change
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-        if (data.size() != 2) {
+        if (data.size() != 1) {
             onInvalidDataReceived(device, data);
             Log.d("myTag", "wrong Size");
             return;

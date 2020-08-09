@@ -159,26 +159,94 @@ public class ConnectedEbikeActivity extends AppCompatActivity {
 				});
 		viewModel.getCurFault().observe(this,
 				changes -> {
-					curFault_txt.setText(changes.toString());
+					switch(changes)
+					{
+						case 0:
+							curFault_txt.setText("NO_FAULT");
+							break;
+						case 1:
+							curFault_txt.setText("OVERTEMP");
+							break;
+						case 2:
+							curFault_txt.setText("OVERVOLT");
+							break;
+						case 3:
+							curFault_txt.setText("UNDERVOLT");
+							break;
+						case 4:
+							curFault_txt.setText("OPENWIRE");
+							break;
+						case 5:
+							curFault_txt.setText("OTHER_FAULT");
+							break;
+						default:
+							curFault_txt.setText(changes.toString());
+							break;
+					}
 					// update ui.
 				});
 		viewModel.getBalanceInWork().observe(this,
 				changes -> {
-					balanceInWork_txt.setText(changes.toString());
+					if(changes == 1)
+					{
+						balanceInWork_txt.setText("BALANCE");
+					}else if (changes == 0)
+					{
+						balanceInWork_txt.setText("NO_BALANCING");
+					}else{
+						balanceInWork_txt.setText(changes.toString());
+					}
 					// update ui.
 				});
 		viewModel.getSmMain().observe(this,
 				changes -> {
-					smMain_txt.setText(changes.toString());
+					switch(changes)
+					{
+						case 0:
+							smMain_txt.setText("SM_IDLE");
+							break;
+						case 1:
+							smMain_txt.setText("SM_ERROR_IDLE");
+							break;
+						case 2:
+							smMain_txt.setText("SM_LOAD");
+							break;
+						case 3:
+							smMain_txt.setText("SM_FAST_CHARGE_START");
+							break;
+						case 4:
+							smMain_txt.setText("SM_FAST_CHARGE_LOW");
+							break;
+						case 5:
+							smMain_txt.setText("SM_FAST_CHARGE_HIGH");
+							break;
+						case 6:
+							smMain_txt.setText("SM_FAST_CHARGE_STOP");
+							break;
+						case 7:
+							smMain_txt.setText("SM_SLOW_CHARGE_START");
+							break;
+						case 8:
+							smMain_txt.setText("SM_SLOW_CHARGE");
+							break;
+						case 9:
+							smMain_txt.setText("SM_SLOW_CHARGE_STOP");
+							break;
+						case 10:
+							smMain_txt.setText("SM_BATTERY_DEAD");
+							break;
+						default:
+							smMain_txt.setText(changes.toString());
+							break;
+					}
 					// update ui.
 				});
-
 
 		//Get the led stats, modify the textView and switch box
 		viewModel.getUnblockSm().observe(this, isOn -> {
 			unblockSmState.setText(isOn ? R.string.turn_on : R.string.turn_off);
 			unblockSm_switch.setChecked(isOn);
-			// update ui.
+			// update ui
 		});
 
 		//READ & WRITE

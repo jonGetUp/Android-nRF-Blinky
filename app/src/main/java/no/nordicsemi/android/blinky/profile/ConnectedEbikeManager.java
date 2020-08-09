@@ -83,9 +83,9 @@ public class ConnectedEbikeManager extends ObservableBleManager {
 
 	/** UUID - READ and WRITE *********************************************************************/
 	/** LED characteristic UUID. */
-	private final static UUID EBIKE_S_UUID_UNBLOCK_SM_CHAR = UUID.fromString("00000003-1212-efde-1523-785feabcd123");
+	private final static UUID EBIKE_S_UUID_UNBLOCK_SM_CHAR = UUID.fromString("00000017-1212-efde-1523-785feabcd123");
 	/** Serial Number characteristic UUID. */
-	private final static UUID EBIKE_S_UUID_SERIAL_NUMBER_CHAR = UUID.fromString("00000004-1212-efde-1523-785feabcd123");
+	private final static UUID EBIKE_S_UUID_SERIAL_NUMBER_CHAR = UUID.fromString("00000018-1212-efde-1523-785feabcd123");
 	//>>>>>>>>>> Add other UUIDs
 
 

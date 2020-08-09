@@ -38,7 +38,7 @@
 
 	<string name="battery_current_title">Current</string>
 	<string name="battery_current_summary">Display the Battery Current</string>
-	<string name="battery_current_unit">[A]</string>
+	<string name="battery_current_unit">[mA]</string>
 
 	<string name="charger_current_title">Charger Current</string>
 	<string name="charger_current_summary">Display the Current on Charger</string>
@@ -85,7 +85,7 @@
 	<string name="bluetooth_disabled_action">Enable</string>
 
 	<string name="ebike_guide_title">CAN\'T SEE YOUR EBIKE?</string>
-	<string name="ebike_guide_info">1. Make sure the DK is <b>turned on</b> and is connected to a power source using a micro USB cable or a coin cell is plugged in.
+	<string name="ebike_guide_info">1. Make sure the EBIKE is <b>turned on</b>
         \n\n2. Make sure the <b>ble_app_ebike</b> firmware and SoftDevice are flashed.</string>
 	<string name="ebike_guide_location_info">3. Location is turned off. Some Android phones require it enabled in order to scan for Bluetooth LE devices.
 		If you are sure your Ebike is advertising and it doesn\'t show up here, click the button below to enable Location.</string>
@@ -93,8 +93,8 @@
 
 	<string name="not_supported_title">DEVICE NOT SUPPORTED</string>
 	<string name="not_supported_info">1. The Connected Ebike service hasn\'t been found on the device\'s attribute table.
-		\n\n2. Make sure the DK is flashed with the correct firmware.
-		\n\n3. If you used the DK with another firmware before, the old services might have been cached by the system.</string>
+		\n\n2. Make sure the nRF is flashed with the correct firmware.
+		\n\n3. If you used the nRF with another firmware before, the old services might have been cached by the system.</string>
 	<string name="not_supported_action">Fix and try again</string>
 
 	<string name="state_connecting">Connecting…</string>
