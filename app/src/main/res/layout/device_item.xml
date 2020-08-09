@@ -52,11 +52,11 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_toStartOf="@+id/rssi"
         android:layout_toEndOf="@id/icon"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         android:ellipsize="end"
         android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         android:textSize="18sp"
-        tools:text="Nordic_Blinky"/>
+        tools:text="Connected Ebike" />
 
     <com.google.android.material.textview.MaterialTextView
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"

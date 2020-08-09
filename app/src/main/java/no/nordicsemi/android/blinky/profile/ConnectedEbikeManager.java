@@ -20,6 +20,18 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**************************************************************************************************/
+/**
+ * @file ConnectedEbikeManager.java
+ *
+ * @brief Manage the bluetooth Profile, between the information receive from the Connected Ebike and
+ * 		  the application information from the ConnectedEbikeActivity.
+ * 		  Initialize the UUIDs, liveData and their callback methods and also the Gatt profile
+ *
+ * @author Gaspoz Jonathan
+ *
+ */
+/**************************************************************************************************/
 package no.nordicsemi.android.blinky.profile;
 
 import android.bluetooth.BluetoothDevice;
@@ -47,7 +59,7 @@ import no.nordicsemi.android.log.LogContract;
 import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
 
-public class BlinkyManager extends ObservableBleManager {
+public class ConnectedEbikeManager extends ObservableBleManager {
 	/** Nordic Blinky Service UUID. */
 	public final static UUID EBIKE_S_UUID_SERVICE = UUID.fromString("00000001-1212-efde-1523-785feabcd123");
 	/** BUTTON characteristic UUID. */
@@ -75,7 +87,7 @@ public class BlinkyManager extends ObservableBleManager {
 	private Integer serialNumber_old;
 	//>>>>>>>>>> Add other WRITE & READ
 
-	public BlinkyManager(@NonNull final Context context) {
+	public ConnectedEbikeManager(@NonNull final Context context) {
 		super(context);
 	}
 
@@ -129,7 +141,7 @@ public class BlinkyManager extends ObservableBleManager {
 		log(Log.VERBOSE, "SerialNumberChanged: " + sn);
 		writeCharacteristic(serialNumber_char,	bytes).with(unblockSmCallback).enqueue();
 	}
-	//>>>>>>>>>> Add other setter()
+	//>>>>>>>>>> Add other set()
 
 	@NonNull
 	@Override

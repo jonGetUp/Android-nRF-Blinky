@@ -30,7 +30,7 @@ import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
 import no.nordicsemi.android.ble.data.Data;
 
 @SuppressWarnings("ConstantConditions")
-public abstract class unblockSmDataCallback implements ProfileDataCallback, DataSentCallback, BlinkyLedCallback {
+public abstract class unblockSmDataCallback implements ProfileDataCallback, DataSentCallback, EbikeUnblockSmCallback {
     private static final byte STATE_OFF = 0x00;
     private static final byte STATE_ON = 0x01;
 

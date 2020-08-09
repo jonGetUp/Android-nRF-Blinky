@@ -26,7 +26,7 @@ import android.bluetooth.BluetoothDevice;
 
 import androidx.annotation.NonNull;
 
-public interface BlinkyButtonCallback {
+public interface EbikeBatVoltCallback {
 
     /**
      * Called when a button was pressed or released on device.

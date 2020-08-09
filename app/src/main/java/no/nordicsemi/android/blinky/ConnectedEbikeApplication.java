@@ -5,7 +5,7 @@ import android.os.Build;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
-public class BlinkyApplication extends Application {
+public class ConnectedEbikeApplication extends Application {
 
     @Override
     public void onCreate() {

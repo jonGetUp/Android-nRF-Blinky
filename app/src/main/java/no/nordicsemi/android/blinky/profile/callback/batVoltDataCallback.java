@@ -31,7 +31,7 @@ import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
 import no.nordicsemi.android.ble.data.Data;
 
 @SuppressWarnings("ConstantConditions")
-public abstract class batVoltDataCallback implements ProfileDataCallback, BlinkyButtonCallback {
+public abstract class batVoltDataCallback implements ProfileDataCallback, EbikeBatVoltCallback {
     private static final int STATE_RELEASED = 0x00;
     private static final int STATE_PRESSED = 0x01;
 

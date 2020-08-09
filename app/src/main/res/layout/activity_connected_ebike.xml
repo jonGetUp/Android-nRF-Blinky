@@ -24,7 +24,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".BlinkyActivity"
+	tools:context=".ConnectedEbikeActivity"
 	tools:ignore="ContentDescription">
 
 	<com.google.android.material.appbar.AppBarLayout
@@ -81,7 +81,7 @@
 						android:layout_height="wrap_content"
 						android:paddingStart="@dimen/activity_horizontal_margin"
 						android:paddingEnd="@dimen/activity_horizontal_margin"
-						android:text="@string/led_summary"
+						android:text="@string/unblockSm_summary"
 						android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintTop_toBottomOf="@+id/unblockSm_tool_bar" />
@@ -135,7 +135,7 @@
 						android:layout_height="wrap_content"
 						android:paddingStart="@dimen/activity_horizontal_margin"
 						android:paddingEnd="@dimen/activity_horizontal_margin"
-						android:text="@string/button_summary"
+						android:text="@string/batVolt_summary"
 						android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintTop_toBottomOf="@+id/batVolt_tool_bar" />
@@ -190,7 +190,7 @@
 						android:layout_height="wrap_content"
 						android:paddingStart="@dimen/activity_horizontal_margin"
 						android:paddingEnd="@dimen/activity_horizontal_margin"
-						android:text="@string/serial_number_summary"
+						android:text="@string/serialNumber_summary"
 						android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintTop_toBottomOf="@+id/serialNumber_tool_bar" />

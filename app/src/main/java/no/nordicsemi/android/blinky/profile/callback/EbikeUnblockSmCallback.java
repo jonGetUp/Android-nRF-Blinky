@@ -26,7 +26,7 @@ import android.bluetooth.BluetoothDevice;
 
 import androidx.annotation.NonNull;
 
-public interface BlinkyLedCallback {
+public interface EbikeUnblockSmCallback {
 
     /**
      * Called when the data has been sent to the connected device.

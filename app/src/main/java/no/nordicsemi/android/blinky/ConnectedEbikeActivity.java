@@ -39,13 +39,23 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import no.nordicsemi.android.ble.livedata.state.ConnectionState;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
-import no.nordicsemi.android.blinky.viewmodels.BlinkyViewModel;
-
+import no.nordicsemi.android.blinky.viewmodels.ConnectedEbikeViewModel;
+/**************************************************************************************************/
+/**
+ * @file ConnectedEbikeActivity.java
+ *
+ * @brief Main activity of the programm, handle all view/material event via callback methods and
+ * 		  redirect it to the ConnectedEbikeViewModel class
+ *
+ * @author Gaspoz Jonathan
+ *
+ */
+/**************************************************************************************************/
 @SuppressWarnings("ConstantConditions")
-public class BlinkyActivity extends AppCompatActivity {
+public class ConnectedEbikeActivity extends AppCompatActivity {
 	public static final String EXTRA_DEVICE = "no.nordicsemi.android.blinky.EXTRA_DEVICE";
 
-	private BlinkyViewModel viewModel;
+	private ConnectedEbikeViewModel viewModel;
 
 	//Bind a field to the view
 	@BindView(R.id.unblockSm_switch) SwitchMaterial unblockSm_switch;
@@ -58,7 +68,7 @@ public class BlinkyActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_blinky);
+		setContentView(R.layout.activity_connected_ebike);
 		ButterKnife.bind(this);
 
 		final Intent intent = getIntent();
@@ -74,7 +84,7 @@ public class BlinkyActivity extends AppCompatActivity {
 
 		/** view Model - Init *********************************************************************/
 		// Configure the view model, get the EBike ViewModel
-		viewModel = new ViewModelProvider(this).get(BlinkyViewModel.class);
+		viewModel = new ViewModelProvider(this).get(ConnectedEbikeViewModel.class);
 		viewModel.connect(device);
 
 		// Set up views.
@@ -85,7 +95,7 @@ public class BlinkyActivity extends AppCompatActivity {
 		final TextView unblockSmState = findViewById(R.id.unblockSm_state);
 		//>>>>>>>>>> Add other views
 
-		/** CALLBACK ON ELEMENTS EVENTS for WRITE ********************************************************************/
+		/** CALLBACK ON ELEMENTS EVENTS for WRITE *************************************************/
 		//Register a callback to be invoked when the checked state of this button changes
 		unblockSm_switch.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.setUnblockSm(isChecked));	//Called when the checked state of a compound button has changed.
 		//Register a callback to be invoked when the checked state of this button changes

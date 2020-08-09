@@ -19,6 +19,18 @@
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/**************************************************************************************************/
+/**
+ * @file ConnectedEbikeViewModel.java
+ *
+ * @brief Class viewModel making the link between the view materials (ConnectedEbikeActivity)
+ * 		  and the bluetooth Profil (ConnectedEbikeManager).
+ * 		  To add new characterisitcs, the only change to apport are set() & get() methods
+ *
+ * @author Gaspoz Jonathan
+ *
+ */
+/**************************************************************************************************/
 
 package no.nordicsemi.android.blinky.viewmodels;
 
@@ -31,22 +43,22 @@ import androidx.lifecycle.LiveData;
 
 import no.nordicsemi.android.ble.livedata.state.ConnectionState;
 import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
-import no.nordicsemi.android.blinky.profile.BlinkyManager;
+import no.nordicsemi.android.blinky.profile.ConnectedEbikeManager;
 import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
 
-public class BlinkyViewModel extends AndroidViewModel {
-	private final BlinkyManager blinkyManager;
+public class ConnectedEbikeViewModel extends AndroidViewModel {
+	private final ConnectedEbikeManager connectedEbikeManager;
 	private BluetoothDevice device;
 
-	public BlinkyViewModel(@NonNull final Application application) {
+	public ConnectedEbikeViewModel(@NonNull final Application application) {
 		super(application);
 		// Initialize the manager.
-		blinkyManager = new BlinkyManager(getApplication());
+		connectedEbikeManager = new ConnectedEbikeManager(getApplication());
 	}
 
 	public LiveData<ConnectionState> getConnectionState() {
-		return blinkyManager.getState();
+		return connectedEbikeManager.getState();
 	}
 
 	/**
@@ -60,7 +72,7 @@ public class BlinkyViewModel extends AndroidViewModel {
 			device = target.getDevice();
 			final LogSession logSession = Logger
 					.newSession(getApplication(), null, target.getAddress(), target.getName());
-			blinkyManager.setLogger(logSession);
+			connectedEbikeManager.setLogger(logSession);
 			reconnect();
 		}
 	}
@@ -72,7 +84,7 @@ public class BlinkyViewModel extends AndroidViewModel {
 	 */
 	public void reconnect() {
 		if (device != null) {
-			blinkyManager.connect(device)
+			connectedEbikeManager.connect(device)
 					.retry(3, 100)
 					.useAutoConnect(false)
 					.enqueue();
@@ -84,13 +96,13 @@ public class BlinkyViewModel extends AndroidViewModel {
 	 */
 	private void disconnect() {
 		device = null;
-		blinkyManager.disconnect().enqueue();
+		connectedEbikeManager.disconnect().enqueue();
 	}
 
 	@Override
 	protected void onCleared() {
 		super.onCleared();
-		if (blinkyManager.isConnected()) {
+		if (connectedEbikeManager.isConnected()) {
 			disconnect();
 		}
 	}
@@ -98,13 +110,13 @@ public class BlinkyViewModel extends AndroidViewModel {
 	/** Characteristics - Get() *******************************************************************/
 	//public LiveData<Boolean> getButtonState() {
 	public LiveData<Integer> getBatVolt() {
-		return blinkyManager.getBatVolt_ld();
+		return connectedEbikeManager.getBatVolt_ld();
 	}
 	public LiveData<Boolean> getUnblockSm() {
-		return blinkyManager.getUnblockSm_ld();
+		return connectedEbikeManager.getUnblockSm_ld();
 	}
 	public LiveData<Integer> getSerialNumber() {
-		return blinkyManager.getSerialNumber_ld();
+		return connectedEbikeManager.getSerialNumber_ld();
 	}
 	//>>>>>>>>>> Add other get() char
 
@@ -115,14 +127,10 @@ public class BlinkyViewModel extends AndroidViewModel {
 	 * @param on true to turn the LED on, false to turn it OFF.
 	 */
 	public void setUnblockSm(final boolean on) {
-		blinkyManager.setUnblockSm_ld(on);
+		connectedEbikeManager.setUnblockSm_ld(on);
 	}
 	public void setSerialNumber(final Integer sn) {
-		blinkyManager.setSerialNumber_ld(sn);
+		connectedEbikeManager.setSerialNumber_ld(sn);
 	}
 	//>>>>>>>>>> Add other set() char
-
-
-
-
 }
