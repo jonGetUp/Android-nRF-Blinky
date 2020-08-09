@@ -54,7 +54,7 @@ import no.nordicsemi.android.ble.livedata.ObservableBleManager;
 import no.nordicsemi.android.blinky.profile.callback.batVoltDataCallback;
 import no.nordicsemi.android.blinky.profile.callback.unblockSmDataCallback;
 import no.nordicsemi.android.blinky.profile.callback.serialNumberDataCallback;
-import no.nordicsemi.android.blinky.profile.data.BlinkyLED;
+import no.nordicsemi.android.blinky.profile.data.EbikeUnblockSm;
 import no.nordicsemi.android.log.LogContract;
 import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
@@ -120,7 +120,7 @@ public class ConnectedEbikeManager extends ObservableBleManager {
 
 		log(Log.VERBOSE, "unblockSm " + (on ? "ON" : "OFF") + "...");
 		writeCharacteristic(unblockSm_char,
-				on ? BlinkyLED.turnOn() : BlinkyLED.turnOff()).with(unblockSmCallback).enqueue();
+				on ? EbikeUnblockSm.turnOn() : EbikeUnblockSm.turnOff()).with(unblockSmCallback).enqueue();
 	}
 	/**
 	 * Sends a request to the device to change the serial number

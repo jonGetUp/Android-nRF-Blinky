@@ -25,20 +25,54 @@
 	<string name="feature_name">EBIKE</string>
 
 	<string name="menu_filter">Filter</string>
-	<string name="menu_filter_uuid">Only devices advertising LBS UUID</string>
+	<string name="menu_filter_uuid">Only devices advertising Ebike UUID</string>
 	<string name="menu_filter_nearby">Only nearby devices</string>
 
+	<string name="unknown">Unknown</string>
 	<string name="unknown_device">Unknown Device</string>
+
+	<!--> Read only <!-->
+	<string name="batVolt_title">Voltage</string>
+	<string name="batVolt_summary">Display the Battery Voltage</string>
+	<string name="batVolt_unit">[mV]</string>
+
+	<string name="battery_current_title">Current</string>
+	<string name="battery_current_summary">Display the Battery Current</string>
+	<string name="battery_current_unit">[A]</string>
+
+	<string name="charger_current_title">Charger Current</string>
+	<string name="charger_current_summary">Display the Current on Charger</string>
+	<string name="charger_current_unit">[A]</string>
+
+	<string name="curFault_title">Fault</string>
+	<string name="curFault_summary">Fault on system</string>
+	<string name="curFault_unit"></string>
+
+	<string name="balanceInWork_title">Balance</string>
+	<string name="balanceInWork_summary">Are we balancing?</string>
+	<string name="balanceInWork_unit"></string>
+
+	<string name="smMain_title">State Machine</string>
+	<string name="smMain_summary">Current state of BMS</string>
+	<string name="smMain_unit"></string>
+
+	<!--> Read & Write <!-->
+	<string name="serialNumber_title">Serial number</string>
+	<string name="serialNumber_summary">Unique device serial number (hexa)</string>
+	<string name="serial_number_btn_send">SEND</string>
+
+
+
+	<!--> System <!-->
 	<string name="turn_on">On</string>
 	<string name="turn_off">Off</string>
 	<string name="title_led_state">LED</string>
-	<string name="title_button_state">Battery</string>
-	<string name="battery_unit">Voltage [V]</string>
+
 	<string name="button_pressed">Pressed</string>
 	<string name="button_released">Released</string>
-	<string name="unknown">Unknown</string>
+
 	<string name="unblockSm_summary">Unknown</string>
-	<string name="batVolt_summary">Display the Battery Voltage</string>
+
 
 	<string name="location_permission_title">LOCATION PERMISSION REQUIRED</string>
 	<string name="location_permission_info">From Android 6.0 Marshmallow onwards the application requires Location permission in order to scan for Bluetooth Low Energy devices.
@@ -65,7 +99,4 @@
 
 	<string name="state_connecting">Connecting…</string>
 	<string name="state_initializing">Initializing…</string>
-	<string name="title_serial_number">Serial number</string>
-	<string name="serialNumber_summary">Unique device serial number (hexa)</string>
-	<string name="serial_number_btn_send">SEND</string>
 </resources>
