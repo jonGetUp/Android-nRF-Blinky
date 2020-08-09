@@ -58,10 +58,16 @@ public class ConnectedEbikeActivity extends AppCompatActivity {
 	private ConnectedEbikeViewModel viewModel;
 
 	//Bind a field to the view
-	@BindView(R.id.unblockSm_switch) SwitchMaterial unblockSm_switch;
 	@BindView(R.id.batVolt_txt) TextView batVolt_txt;
+	@BindView(R.id.battery_current_txt) TextView battery_current_txt;
+	@BindView(R.id.charger_current_txt) TextView charger_current_txt;
+	@BindView(R.id.curFault_txt) TextView curFault_txt;
+	@BindView(R.id.balanceInWork_txt) TextView balanceInWork_txt;
+	@BindView(R.id.smMain_txt) TextView smMain_txt;
+
 	@BindView(R.id.serialNumber_txt) TextView serialNumber_txt;
 	@BindView(R.id.serialNumber_btn) TextView serialNumber_btn;
+	@BindView(R.id.unblockSm_switch) SwitchMaterial unblockSm_switch;
 	//>>>>>>>>>> Add other elements
 
 	/** onCreate **********************************************************************************/
@@ -133,7 +139,41 @@ public class ConnectedEbikeActivity extends AppCompatActivity {
 			}
 		});
 
-		//Initialize the UI with bluetooth characteristics
+		/** Initialize the UI with bluetooth characteristics **************************************/
+		// READ only
+		//Get the button state and modify the textView
+		viewModel.getBatVolt().observe(this,
+				changes -> {
+					batVolt_txt.setText(changes.toString());
+					// update ui.
+				});
+		viewModel.getBattery_Current().observe(this,
+				changes -> {
+					battery_current_txt.setText(changes.toString());
+					// update ui.
+				});
+		viewModel.getCharger_Current().observe(this,
+				changes -> {
+					charger_current_txt.setText(changes.toString());
+					// update ui.
+				});
+		viewModel.getCurFault().observe(this,
+				changes -> {
+					curFault_txt.setText(changes.toString());
+					// update ui.
+				});
+		viewModel.getBalanceInWork().observe(this,
+				changes -> {
+					balanceInWork_txt.setText(changes.toString());
+					// update ui.
+				});
+		viewModel.getSmMain().observe(this,
+				changes -> {
+					smMain_txt.setText(changes.toString());
+					// update ui.
+				});
+
+
 		//Get the led stats, modify the textView and switch box
 		viewModel.getUnblockSm().observe(this, isOn -> {
 			unblockSmState.setText(isOn ? R.string.turn_on : R.string.turn_off);
@@ -141,13 +181,7 @@ public class ConnectedEbikeActivity extends AppCompatActivity {
 			// update ui.
 		});
 
-		//Get the button state and modify the textView
-		viewModel.getBatVolt().observe(this,
-				pressed -> {
-					batVolt_txt.setText(pressed.toString());
-					// update ui.
-				});
-
+		//READ & WRITE
 		//Get the serialNumber and modify the textView
 		//Override the onChange method (Called when the data is changed)
 		viewModel.getSerialNumber().observe(this,		//this : MaterialButton = serial_number_btn_send
@@ -175,9 +209,15 @@ public class ConnectedEbikeActivity extends AppCompatActivity {
 	private void onConnectionStateChanged(final boolean connected) {
 		unblockSm_switch.setEnabled(connected);
 		if (!connected) {
-			unblockSm_switch.setChecked(false);
 			batVolt_txt.setText(R.string.unknown);
+			battery_current_txt.setText(R.string.unknown);
+			charger_current_txt.setText(R.string.unknown);
+			curFault_txt.setText(R.string.unknown);
+			balanceInWork_txt.setText(R.string.unknown);
+			smMain_txt.setText(R.string.unknown);
+
 			serialNumber_txt.setText(R.string.unknown);
+			unblockSm_switch.setChecked(false);
 			//>>>>>>>>>> Add other default values
 		}
 	}

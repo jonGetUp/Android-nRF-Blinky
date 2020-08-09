@@ -112,6 +112,22 @@ public class ConnectedEbikeViewModel extends AndroidViewModel {
 	public LiveData<Integer> getBatVolt() {
 		return connectedEbikeManager.getBatVolt_ld();
 	}
+	public LiveData<Integer> getBattery_Current() {
+		return connectedEbikeManager.getBattery_Current_ld();
+	}
+	public LiveData<Integer> getCharger_Current() {
+		return connectedEbikeManager.getCharger_Current_ld();
+	}
+	public LiveData<Integer> getCurFault() {
+		return connectedEbikeManager.getCurFault_ld();
+	}
+	public LiveData<Integer> getBalanceInWork() {
+		return connectedEbikeManager.getBalanceInWork_ld();
+	}
+	public LiveData<Integer> getSmMain() {
+		return connectedEbikeManager.getSmMain_ld();
+	}
+
 	public LiveData<Boolean> getUnblockSm() {
 		return connectedEbikeManager.getUnblockSm_ld();
 	}

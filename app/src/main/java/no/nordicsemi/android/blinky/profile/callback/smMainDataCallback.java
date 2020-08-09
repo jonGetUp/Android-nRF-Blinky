@@ -23,16 +23,27 @@
 package no.nordicsemi.android.blinky.profile.callback;
 
 import android.bluetooth.BluetoothDevice;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-public interface EbikeBatVoltCallback {
+import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
+import no.nordicsemi.android.ble.data.Data;
 
-    /**
-     * Called when a button was pressed or released on device.
-     *
-     * @param device the target device.
-     * @param pressed true if the button was pressed, false if released.
-     */
-    void onBatVoltChanged(@NonNull final BluetoothDevice device, final Integer pressed);
+@SuppressWarnings("ConstantConditions")
+public abstract class smMainDataCallback implements ProfileDataCallback, EbikeSmMainCallback {    //Change
+    @Override
+    public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+        if (data.size() != 2) {
+            onInvalidDataReceived(device, data);
+            Log.d("myTag", "wrong Size");
+            return;
+        }
+        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);   //change
+        if(state == 0)
+        {
+            Log.d("myTag", "receive 0");
+        }
+        onSmMainChanged(device, state);
+    }
 }

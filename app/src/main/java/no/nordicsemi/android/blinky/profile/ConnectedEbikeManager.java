@@ -51,7 +51,12 @@ import java.util.UUID;
 
 import no.nordicsemi.android.ble.data.Data;
 import no.nordicsemi.android.ble.livedata.ObservableBleManager;
+import no.nordicsemi.android.blinky.profile.callback.balanceInWorkDataCallback;
 import no.nordicsemi.android.blinky.profile.callback.batVoltDataCallback;
+import no.nordicsemi.android.blinky.profile.callback.battery_currentDataCallback;
+import no.nordicsemi.android.blinky.profile.callback.charger_currentDataCallback;
+import no.nordicsemi.android.blinky.profile.callback.curFaultDataCallback;
+import no.nordicsemi.android.blinky.profile.callback.smMainDataCallback;
 import no.nordicsemi.android.blinky.profile.callback.unblockSmDataCallback;
 import no.nordicsemi.android.blinky.profile.callback.serialNumberDataCallback;
 import no.nordicsemi.android.blinky.profile.data.EbikeUnblockSm;
@@ -62,27 +67,53 @@ import no.nordicsemi.android.log.Logger;
 public class ConnectedEbikeManager extends ObservableBleManager {
 	/** Nordic Blinky Service UUID. */
 	public final static UUID EBIKE_S_UUID_SERVICE = UUID.fromString("00000001-1212-efde-1523-785feabcd123");
-	/** BUTTON characteristic UUID. */
+	/** UUID - READ ONLY **************************************************************************/
+	/** BATVOLT characteristic UUID. */
 	private final static UUID EBIKE_S_UUID_BATVOLT_CHAR = UUID.fromString("00000002-1212-efde-1523-785feabcd123");
+	/** BATTERY_CURRENT characteristic UUID. */
+	private final static UUID EBIKE_S_UUID_BATTERY_CURRENT_CHAR = UUID.fromString("00000010-1212-efde-1523-785feabcd123");
+	/** CHARGER_CURRENT characteristic UUID. */
+	private final static UUID EBIKE_S_UUID_CHARGER_CURRENT_CHAR = UUID.fromString("00000011-1212-efde-1523-785feabcd123");
+	/** CURFAULT characteristic UUID. */
+	private final static UUID EBIKE_S_UUID_CURFAULT_CHAR = UUID.fromString("00000014-1212-efde-1523-785feabcd123");
+	/** BALANCEINWORK characteristic UUID. */
+	private final static UUID EBIKE_S_UUID_BALANCEINWORK_CHAR = UUID.fromString("00000015-1212-efde-1523-785feabcd123");
+	/** SMMAIN characteristic UUID. */
+	private final static UUID EBIKE_S_UUID_SMMAIN_CHAR = UUID.fromString("000000016-1212-efde-1523-785feabcd123");
+
+	/** UUID - READ and WRITE *********************************************************************/
 	/** LED characteristic UUID. */
 	private final static UUID EBIKE_S_UUID_UNBLOCK_SM_CHAR = UUID.fromString("00000003-1212-efde-1523-785feabcd123");
 	/** Serial Number characteristic UUID. */
 	private final static UUID EBIKE_S_UUID_SERIAL_NUMBER_CHAR = UUID.fromString("00000004-1212-efde-1523-785feabcd123");
 	//>>>>>>>>>> Add other UUIDs
 
-	//LiveData : data holder class that can be observed within a given lifecycle.
-	//Observer will be notified about modifications of the wrapped data only if the paired LifecycleOwner is in active state
-	private final MutableLiveData<Boolean> unblockSm_ld = new MutableLiveData<>();
+
+	/** LiveData **********************************************************************************/
+	/**	LiveData : data holder class that can be observed within a given lifecycle.
+	 *   		   Observer will be notified about modifications of the wrapped data only if
+	 *   		   the paired LifecycleOwner is in active state */
+	//READ only
 	private final MutableLiveData<Integer> batVolt_ld = new MutableLiveData<>();
+	private final MutableLiveData<Integer> battery_current_ld = new MutableLiveData<>();
+	private final MutableLiveData<Integer> charger_current_ld = new MutableLiveData<>();
+	private final MutableLiveData<Integer> curFault_ld = new MutableLiveData<>();
+	private final MutableLiveData<Integer> balanceInWork_ld = new MutableLiveData<>();
+	private final MutableLiveData<Integer> smMain_ld = new MutableLiveData<>();
+
+	//READ & WRITE
+	private final MutableLiveData<Boolean> unblockSm_ld = new MutableLiveData<>();
 	private final MutableLiveData<Integer> serialNumber_ld = new MutableLiveData<>();
 	//>>>>>>>>>> Add other LiveData
 
-	// Client characteristics
-	private BluetoothGattCharacteristic batVolt_char, unblockSm_char, serialNumber_char;
+	/** Client characteristics ********************************************************************/
+	private BluetoothGattCharacteristic batVolt_char, battery_current_char, charger_current_char,
+			curFault_char, balanceInWork_char, smMain_char, unblockSm_char, serialNumber_char;
+	//>>>>>>>>>> Add other Char
 	private LogSession logSession;
 	private boolean supported;
 
-	//Old value for WRITE & READ char, avoid rewrite same value
+	/** Old value for WRITE & READ char, avoid rewrite same value**********************************/
 	private boolean unblockSm_old;
 	private Integer serialNumber_old;
 	//>>>>>>>>>> Add other WRITE & READ
@@ -92,41 +123,37 @@ public class ConnectedEbikeManager extends ObservableBleManager {
 	}
 
 	 /** GET() Live data characteristics **********************************************************/
-	public final LiveData<Boolean> getUnblockSm_ld() {
-		return unblockSm_ld;
-	}
+	//READ only
 	public final LiveData<Integer> getBatVolt_ld() {
 		return batVolt_ld;
+	}
+	public final LiveData<Integer> getBattery_Current_ld() {
+		return battery_current_ld;
+	}
+	public final LiveData<Integer> getCharger_Current_ld() {
+		return charger_current_ld;
+	}
+	public final LiveData<Integer> getCurFault_ld() {
+		return curFault_ld;
+	}
+	public final LiveData<Integer> getBalanceInWork_ld() {
+		return balanceInWork_ld;
+	}
+	public final LiveData<Integer> getSmMain_ld() {
+		return smMain_ld;
+	}
+
+	//READ & WRITE
+	public final LiveData<Boolean> getUnblockSm_ld() {
+		return unblockSm_ld;
 	}
 	public final LiveData<Integer> getSerialNumber_ld() {
 		return serialNumber_ld;
 	}
 	//>>>>>>>>>> Add other getter()
 
-	 /** SET() Live data characteristics **********************************************************/
-	/**
-	 * Sends a request to the device to set unblockSm on or off.
-	 *
-	 * @param on true or false
-	 */
-	public void setUnblockSm_ld(final boolean on) {
-		// Are we connected?
-		if (unblockSm_char == null)
-			return;
 
-		// No need to change?
-		if (unblockSm_old == on)
-			return;
-
-		log(Log.VERBOSE, "unblockSm " + (on ? "ON" : "OFF") + "...");
-		writeCharacteristic(unblockSm_char,
-				on ? EbikeUnblockSm.turnOn() : EbikeUnblockSm.turnOff()).with(unblockSmCallback).enqueue();
-	}
-	/**
-	 * Sends a request to the device to change the serial number
-	 *
-	 * @param sn serial number
-	 */
+	 /** SET() Live data characteristics - WRITE **************************************************/
 	public void setSerialNumber_ld(final Integer sn) {
 		// Are we connected?
 		if (serialNumber_char == null)
@@ -141,7 +168,20 @@ public class ConnectedEbikeManager extends ObservableBleManager {
 		log(Log.VERBOSE, "SerialNumberChanged: " + sn);
 		writeCharacteristic(serialNumber_char,	bytes).with(unblockSmCallback).enqueue();
 	}
-	//>>>>>>>>>> Add other set()
+	public void setUnblockSm_ld(final boolean on) {
+		// Are we connected?
+		if (unblockSm_char == null)
+			return;
+
+		// No need to change?
+		if (unblockSm_old == on)
+			return;
+
+		log(Log.VERBOSE, "unblockSm " + (on ? "ON" : "OFF") + "...");
+		writeCharacteristic(unblockSm_char,
+				on ? EbikeUnblockSm.turnOn() : EbikeUnblockSm.turnOff()).with(unblockSmCallback).enqueue();
+	}
+	//>>>>>>>>>> Add other set() for WRITE char
 
 	@NonNull
 	@Override
@@ -168,7 +208,9 @@ public class ConnectedEbikeManager extends ObservableBleManager {
 	}
 
 	/** CALLBACK **********************************************************************************/
+	//READ ONLY
 	/**
+	 * BATTERY CURRENT:
 	 * The batVolt callback will be notified when a notification from batVolt characteristic
 	 * has been received, or its data was read.
 	 * <p>
@@ -189,7 +231,73 @@ public class ConnectedEbikeManager extends ObservableBleManager {
 			log(Log.WARN, "Invalid data received: " + data);
 		}
 	};
+	/** BATTERY CURRENT **/
+	private	final battery_currentDataCallback battery_currentCallback = new battery_currentDataCallback() {
+		@Override
+		public void onBattery_CurrentChanged(@NonNull final BluetoothDevice device,
+											 final Integer battery_current) {
+			battery_current_ld.setValue(battery_current);
+		}
+		@Override
+		public void onInvalidDataReceived(@NonNull final BluetoothDevice device,
+										  @NonNull final Data data) {
+			log(Log.WARN, "Invalid data received: " + data);
+		}
+	};
+	/** CHARGER CURRENT **/
+	private	final charger_currentDataCallback charger_currentCallback = new charger_currentDataCallback() {
+		@Override
+		public void onCharger_CurrentChanged(@NonNull final BluetoothDevice device,
+									 final Integer charger_current) {
+			charger_current_ld.setValue(charger_current);
+		}
+		@Override
+		public void onInvalidDataReceived(@NonNull final BluetoothDevice device,
+										  @NonNull final Data data) {
+			log(Log.WARN, "Invalid data received: " + data);
+		}
+	};
+	/** CURFAULT **/
+	private	final curFaultDataCallback curFaultCallback = new curFaultDataCallback() {
+		@Override
+		public void onCurFaultChanged(@NonNull final BluetoothDevice device,
+									 final Integer curFault) {
+			curFault_ld.setValue(curFault);
+		}
+		@Override
+		public void onInvalidDataReceived(@NonNull final BluetoothDevice device,
+										  @NonNull final Data data) {
+			log(Log.WARN, "Invalid data received: " + data);
+		}
+	};
+	/** BALANCEINWORK **/
+	private	final balanceInWorkDataCallback balanceInWorkCallback = new balanceInWorkDataCallback() {
+		@Override
+		public void onBalanceInWorkChanged(@NonNull final BluetoothDevice device,
+									 final Integer balanceInWork) {
+			balanceInWork_ld.setValue(balanceInWork);
+		}
+		@Override
+		public void onInvalidDataReceived(@NonNull final BluetoothDevice device,
+										  @NonNull final Data data) {
+			log(Log.WARN, "Invalid data received: " + data);
+		}
+	};
+	/** SM MAIN **/
+	private	final smMainDataCallback smMainCallback = new smMainDataCallback() {
+		@Override
+		public void onSmMainChanged(@NonNull final BluetoothDevice device,
+									 final Integer smMain) {
+			smMain_ld.setValue(smMain);
+		}
+		@Override
+		public void onInvalidDataReceived(@NonNull final BluetoothDevice device,
+										  @NonNull final Data data) {
+			log(Log.WARN, "Invalid data received: " + data);
+		}
+	};
 
+	//READ & WRITE
 	/**
 	 * The unblockSm callback will be notified when the unblockSm state was read or sent to the target device.
 	 * <p>
@@ -259,16 +367,34 @@ public class ConnectedEbikeManager extends ObservableBleManager {
 			//>>>>>>>>>> Add other Notifications
 			//Sets the asynchronous data callback that will be called whenever a notification or an indication is received on given characteristic.
 			setNotificationCallback(batVolt_char).with(batVoltCallback);
+			setNotificationCallback(battery_current_char).with(battery_currentCallback);
+			setNotificationCallback(charger_current_char).with(charger_currentCallback);
+			setNotificationCallback(curFault_char).with(curFaultCallback);
+			setNotificationCallback(balanceInWork_char).with(balanceInWorkCallback);
+			setNotificationCallback(smMain_char).with(smMainCallback);
+
 			setNotificationCallback(serialNumber_char).with(serialNumberCallback);
 			setNotificationCallback(unblockSm_char).with(unblockSmCallback);
 
 			//Read characteristics
-			readCharacteristic(batVolt_char).with(batVoltCallback).enqueue();
-			readCharacteristic(unblockSm_char).with(unblockSmCallback).enqueue();	//Sends a read request to the given characteristic.
+			readCharacteristic(batVolt_char).with(batVoltCallback).enqueue(); //Sends a read request to the given characteristic.
+			readCharacteristic(battery_current_char).with(battery_currentCallback).enqueue();
+			readCharacteristic(charger_current_char).with(charger_currentCallback).enqueue();
+			readCharacteristic(curFault_char).with(curFaultCallback).enqueue();
+			readCharacteristic(balanceInWork_char).with(balanceInWorkCallback).enqueue();
+			readCharacteristic(smMain_char).with(smMainCallback).enqueue();
+
+			readCharacteristic(unblockSm_char).with(unblockSmCallback).enqueue();
 			readCharacteristic(serialNumber_char).with(serialNumberCallback).enqueue();
 
 			//Enable char notification
 			enableNotifications(batVolt_char).enqueue();
+			enableNotifications(battery_current_char).enqueue();
+			enableNotifications(charger_current_char).enqueue();
+			enableNotifications(curFault_char).enqueue();
+			enableNotifications(balanceInWork_char).enqueue();
+			enableNotifications(smMain_char).enqueue();
+
 			enableNotifications(serialNumber_char).enqueue();
 			enableNotifications(unblockSm_char).enqueue();
 		}
@@ -281,17 +407,24 @@ public class ConnectedEbikeManager extends ObservableBleManager {
 			final BluetoothGattService service = gatt.getService(EBIKE_S_UUID_SERVICE);
 			if (service != null) {
 				batVolt_char = service.getCharacteristic(EBIKE_S_UUID_BATVOLT_CHAR);
+				battery_current_char = service.getCharacteristic(EBIKE_S_UUID_BATTERY_CURRENT_CHAR);
+				charger_current_char = service.getCharacteristic(EBIKE_S_UUID_CHARGER_CURRENT_CHAR);
+				curFault_char = service.getCharacteristic(EBIKE_S_UUID_CURFAULT_CHAR);
+				balanceInWork_char = service.getCharacteristic(EBIKE_S_UUID_BALANCEINWORK_CHAR);
+				smMain_char = service.getCharacteristic(EBIKE_S_UUID_SMMAIN_CHAR);
+
 				unblockSm_char = service.getCharacteristic(EBIKE_S_UUID_UNBLOCK_SM_CHAR);
 				serialNumber_char = service.getCharacteristic(EBIKE_S_UUID_SERIAL_NUMBER_CHAR);
 				//>>>>>>>>>> Add other char
 			}
 
 			// Validate properties, check if we can write on the characteristics, or it notify
-			boolean notify = false;
-			if (serialNumber_char != null) {
-				final int properties = serialNumber_char.getProperties();
-				notify = (properties & BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0;
-			}
+//			boolean notify = false;
+//			if (serialNumber_char != null) {
+//				final int properties = serialNumber_char.getProperties();
+//				notify = (properties & BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0;
+//			}
+
 			boolean writeRequest = false;
 			if (unblockSm_char != null) {
 				final int rxProperties = unblockSm_char.getProperties();
@@ -302,9 +435,9 @@ public class ConnectedEbikeManager extends ObservableBleManager {
 				writeRequest = (rxProperties & BluetoothGattCharacteristic.PROPERTY_WRITE) > 0;
 				//serialNumberCharacteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
 			}
-			//>>>>>>>>>> Add other Tests
+			//>>>>>>>>>> Add other Tests for WRITE
 			// Return true if all required services have been found
-			supported = batVolt_char != null && unblockSm_char != null && serialNumber_char != null && writeRequest && notify;
+			supported = batVolt_char != null && unblockSm_char != null && serialNumber_char != null && writeRequest; //&& notify;
 			return supported;
 		}
 
@@ -312,6 +445,12 @@ public class ConnectedEbikeManager extends ObservableBleManager {
 		protected void onDeviceDisconnected() {
 			// Device disconnected. Release your references here.
 			batVolt_char = null;
+			battery_current_char = null;
+			charger_current_char = null;
+			curFault_char = null;
+			balanceInWork_char = null;
+			smMain_char = null;
+
 			unblockSm_char = null;
 			serialNumber_char = null;
 			//>>>>>>>>>> Add other dereferences
