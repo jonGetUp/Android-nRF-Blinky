@@ -127,7 +127,7 @@
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintRight_toRightOf="parent"
 						app:layout_constraintTop_toTopOf="parent"
-						app:logo="@drawable/ic_toolbar_battery"
+						app:logo="@drawable/ic_bolt"
 						app:title="@string/battery_current_title"
 						app:titleMarginStart="@dimen/toolbar_title_margin" />
 
@@ -182,7 +182,7 @@
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintRight_toRightOf="parent"
 						app:layout_constraintTop_toTopOf="parent"
-						app:logo="@drawable/ic_toolbar_battery"
+						app:logo="@drawable/ic_bolt"
 						app:title="@string/charger_current_title"
 						app:titleMarginStart="@dimen/toolbar_title_margin" />
 
@@ -237,7 +237,7 @@
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintRight_toRightOf="parent"
 						app:layout_constraintTop_toTopOf="parent"
-						app:logo="@drawable/ic_toolbar_button"
+						app:logo="@drawable/ic_bolt"
 						app:title="@string/charger_current_high_title"
 						app:titleMarginStart="@dimen/toolbar_title_margin" />
 
@@ -291,7 +291,7 @@
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintRight_toRightOf="parent"
 						app:layout_constraintTop_toTopOf="parent"
-						app:logo="@drawable/ic_toolbar_button"
+						app:logo="@drawable/ic_bolt"
 						app:title="@string/charger_current_low_title"
 						app:titleMarginStart="@dimen/toolbar_title_margin" />
 
@@ -345,7 +345,7 @@
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintRight_toRightOf="parent"
 						app:layout_constraintTop_toTopOf="parent"
-						app:logo="@drawable/ic_toolbar_battery"
+						app:logo="@drawable/ic_warning"
 						app:title="@string/curFault_title"
 						app:titleMarginStart="@dimen/toolbar_title_margin" />
 
@@ -400,7 +400,7 @@
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintRight_toRightOf="parent"
 						app:layout_constraintTop_toTopOf="parent"
-						app:logo="@drawable/ic_toolbar_battery"
+						app:logo="@drawable/ic_law"
 						app:title="@string/balanceInWork_title"
 						app:titleMarginStart="@dimen/toolbar_title_margin" />
 
@@ -456,7 +456,7 @@
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintRight_toRightOf="parent"
 						app:layout_constraintTop_toTopOf="parent"
-						app:logo="@drawable/ic_toolbar_battery"
+						app:logo="@drawable/ic_settings"
 						app:title="@string/smMain_title"
 						app:titleMarginStart="@dimen/toolbar_title_margin" />
 
@@ -511,7 +511,7 @@
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintRight_toRightOf="parent"
 						app:layout_constraintTop_toTopOf="parent"
-						app:logo="@drawable/ic_toolbar_lightbulb"
+						app:logo="@drawable/ic_bug"
 						app:title="@string/unblockSm_title"
 						app:titleMarginStart="@dimen/toolbar_title_margin" />
 
@@ -565,7 +565,7 @@
 						app:layout_constraintLeft_toLeftOf="parent"
 						app:layout_constraintRight_toRightOf="parent"
 						app:layout_constraintTop_toTopOf="parent"
-						app:logo="@drawable/ic_toolbar_button"
+						app:logo="@drawable/ic_code"
 						app:title="@string/serialNumber_title"
 						app:titleMarginStart="@dimen/toolbar_title_margin" />
 

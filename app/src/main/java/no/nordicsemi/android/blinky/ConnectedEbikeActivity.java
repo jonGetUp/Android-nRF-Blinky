@@ -277,15 +277,6 @@ public class ConnectedEbikeActivity extends AppCompatActivity {
 					// update ui.
 				});
 		//>>>>>>>>>> Add other : override of method call on viewModel.material event callback methods
-
-		//Get the serialNumber and modify the textView
-//		viewModel.getSerialNumber().observe(this, new Observer<Integer>() {
-//             @Override
-//             public void onChanged(@Nullable Integer integer) {
-//                 serialNumberTxt.setText(integer.toString());
-//             	// update ui.
-//             }
-//         });
 	}
 
 	@OnClick(R.id.action_clear_cache)
