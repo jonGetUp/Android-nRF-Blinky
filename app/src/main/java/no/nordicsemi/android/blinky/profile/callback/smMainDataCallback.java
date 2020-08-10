@@ -40,10 +40,6 @@ public abstract class smMainDataCallback implements ProfileDataCallback, EbikeSm
             return;
         }
         final int state = data.getIntValue(Data.FORMAT_UINT8, 0);   //change
-        if(state == 0)
-        {
-            Log.d("myTag", "receive 0");
-        }
         onSmMainChanged(device, state);
     }
 }

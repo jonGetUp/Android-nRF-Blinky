@@ -19,18 +19,6 @@
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/**************************************************************************************************/
-/**
- * @file ConnectedEbikeViewModel.java
- *
- * @brief Class viewModel making the link between the view materials (ConnectedEbikeActivity)
- * 		  and the bluetooth Profil (ConnectedEbikeManager).
- * 		  To add new characterisitcs, the only change to apport are set() & get() methods
- *
- * @author Gaspoz Jonathan
- *
- */
-/**************************************************************************************************/
 
 package no.nordicsemi.android.blinky.viewmodels;
 
@@ -47,6 +35,18 @@ import no.nordicsemi.android.blinky.profile.ConnectedEbikeManager;
 import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
 
+/**************************************************************************************************/
+/**
+ * @file ConnectedEbikeViewModel.java
+ *
+ * @brief Class viewModel making the link between the view materials (ConnectedEbikeActivity)
+ * 		  and the bluetooth Profil (ConnectedEbikeManager).
+ * 		  To add new characterisitcs, the only change to apport are set() & get() methods
+ *
+ * @author Gaspoz Jonathan
+ *
+ */
+/**************************************************************************************************/
 public class ConnectedEbikeViewModel extends AndroidViewModel {
 	private final ConnectedEbikeManager connectedEbikeManager;
 	private BluetoothDevice device;
@@ -108,32 +108,17 @@ public class ConnectedEbikeViewModel extends AndroidViewModel {
 	}
 
 	/** Characteristics - Get() *******************************************************************/
-	//public LiveData<Boolean> getButtonState() {
-	public LiveData<Integer> getBatVolt() {
-		return connectedEbikeManager.getBatVolt_ld();
-	}
-	public LiveData<Integer> getBattery_Current() {
-		return connectedEbikeManager.getBattery_Current_ld();
-	}
-	public LiveData<Integer> getCharger_Current() {
-		return connectedEbikeManager.getCharger_Current_ld();
-	}
-	public LiveData<Integer> getCurFault() {
-		return connectedEbikeManager.getCurFault_ld();
-	}
-	public LiveData<Integer> getBalanceInWork() {
-		return connectedEbikeManager.getBalanceInWork_ld();
-	}
-	public LiveData<Integer> getSmMain() {
-		return connectedEbikeManager.getSmMain_ld();
-	}
+	public LiveData<Integer> getBatVolt() {	return connectedEbikeManager.getBatVolt_ld();}
+	public LiveData<Integer> getBattery_Current() {	return connectedEbikeManager.getBattery_Current_ld();}
+	public LiveData<Integer> getCharger_Current() {	return connectedEbikeManager.getCharger_Current_ld();}
+	public LiveData<Integer> getCurFault() {return connectedEbikeManager.getCurFault_ld();}
+	public LiveData<Integer> getBalanceInWork() {return connectedEbikeManager.getBalanceInWork_ld();}
+	public LiveData<Integer> getSmMain() {return connectedEbikeManager.getSmMain_ld();}
 
-	public LiveData<Boolean> getUnblockSm() {
-		return connectedEbikeManager.getUnblockSm_ld();
-	}
-	public LiveData<Integer> getSerialNumber() {
-		return connectedEbikeManager.getSerialNumber_ld();
-	}
+	public LiveData<Boolean> getUnblockSm() { return connectedEbikeManager.getUnblockSm_ld();}
+	public LiveData<Integer> getSerialNumber() { return connectedEbikeManager.getSerialNumber_ld();}
+	public LiveData<Integer> getCurrent_Charger_High() { return connectedEbikeManager.getCharger_Current_High_ld();}
+	public LiveData<Integer> getCurrent_Charger_Low() { return connectedEbikeManager.getCharger_Current_Low_ld();}
 	//>>>>>>>>>> Add other get() char
 
 	/** Characteristics - Set() *******************************************************************/
@@ -148,5 +133,7 @@ public class ConnectedEbikeViewModel extends AndroidViewModel {
 	public void setSerialNumber(final Integer sn) {
 		connectedEbikeManager.setSerialNumber_ld(sn);
 	}
+	public void setCurrent_Charger_High(final Integer i) { connectedEbikeManager.setCharger_Current_High_ld(i);}
+	public void setCurrent_Charger_Low(final Integer i) { connectedEbikeManager.setCharger_Current_Low_ld(i);}
 	//>>>>>>>>>> Add other set() char
 }

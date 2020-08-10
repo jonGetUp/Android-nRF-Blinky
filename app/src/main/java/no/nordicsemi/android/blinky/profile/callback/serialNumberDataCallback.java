@@ -44,7 +44,7 @@ public abstract class serialNumberDataCallback implements ProfileDataCallback, D
     }
 
     private void parse(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-        if (data.size() <= 16) {
+        if (data.size() <= 4) {
             final int sn = data.getIntValue(Data.FORMAT_UINT32, 0);
             onSerialNumberChanged(device, sn);
         }else{

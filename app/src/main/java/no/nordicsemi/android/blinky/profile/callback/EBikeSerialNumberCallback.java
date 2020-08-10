@@ -32,7 +32,7 @@ public interface EBikeSerialNumberCallback {
      * Called when the data has been sent to the connected device.
      *
      * @param device the target device.
-     * @param on true when LED was enabled, false when disabled.
+     * @param on value
      */
     void onSerialNumberChanged(@NonNull final BluetoothDevice device, final Integer on);
 }

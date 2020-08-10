@@ -67,6 +67,10 @@ public class ConnectedEbikeActivity extends AppCompatActivity {
 
 	@BindView(R.id.serialNumber_txt) TextView serialNumber_txt;
 	@BindView(R.id.serialNumber_btn) TextView serialNumber_btn;
+	@BindView(R.id.charger_current_high_txt) TextView charger_current_high_txt;
+	@BindView(R.id.charger_current_high_btn) TextView charger_current_high_btn;
+	@BindView(R.id.charger_current_low_txt) TextView charger_current_low_txt;
+	@BindView(R.id.charger_current_low_btn) TextView charger_current_low_btn;
 	@BindView(R.id.unblockSm_switch) SwitchMaterial unblockSm_switch;
 	//>>>>>>>>>> Add other elements
 
@@ -103,9 +107,14 @@ public class ConnectedEbikeActivity extends AppCompatActivity {
 
 		/** CALLBACK ON ELEMENTS EVENTS for WRITE *************************************************/
 		//Register a callback to be invoked when the checked state of this button changes
-		unblockSm_switch.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.setUnblockSm(isChecked));	//Called when the checked state of a compound button has changed.
-		//Register a callback to be invoked when the checked state of this button changes
-		serialNumber_btn.setOnClickListener((v) -> viewModel.setSerialNumber(Integer.parseInt(serialNumber_txt.getText().toString())));//Called when a view has been clicked.
+		unblockSm_switch.setOnCheckedChangeListener(
+				(buttonView, isChecked) -> viewModel.setUnblockSm(isChecked));	//Called when the checked state of a compound button has changed.
+		serialNumber_btn.setOnClickListener(
+				(v) -> viewModel.setSerialNumber(Integer.parseInt(serialNumber_txt.getText().toString())));//Called when the button has been clicked.
+		charger_current_high_btn.setOnClickListener(
+				(v) -> viewModel.setCurrent_Charger_High(Integer.parseInt(charger_current_high_txt.getText().toString())));
+		charger_current_low_btn.setOnClickListener(
+				(v) -> viewModel.setCurrent_Charger_Low(Integer.parseInt(charger_current_low_txt.getText().toString())));
 
 		/** viewModel - GET()**********************************************************************/
 		//Implement functional interfaces of viewModel
@@ -257,6 +266,16 @@ public class ConnectedEbikeActivity extends AppCompatActivity {
 					serialNumber_txt.setText(sn.toString());	//override method : TextView
 					// update ui.
 				});
+		viewModel.getCurrent_Charger_High().observe(this,
+				ih -> {
+					charger_current_high_txt.setText(ih.toString());
+					// update ui.
+				});
+		viewModel.getCurrent_Charger_Low().observe(this,
+				il -> {
+					charger_current_low_txt.setText(il.toString());
+					// update ui.
+				});
 		//>>>>>>>>>> Add other : override of method call on viewModel.material event callback methods
 
 		//Get the serialNumber and modify the textView
@@ -286,6 +305,8 @@ public class ConnectedEbikeActivity extends AppCompatActivity {
 
 			serialNumber_txt.setText(R.string.unknown);
 			unblockSm_switch.setChecked(false);
+			charger_current_high_txt.setText(R.string.unknown);
+			charger_current_low_txt.setText(R.string.unknown);
 			//>>>>>>>>>> Add other default values
 		}
 	}

@@ -42,7 +42,7 @@
 
 	<string name="charger_current_title">Charger Current</string>
 	<string name="charger_current_summary">Display the Current on Charger</string>
-	<string name="charger_current_unit">[A]</string>
+	<string name="charger_current_unit">[0.1A]</string>
 
 	<string name="curFault_title">Fault</string>
 	<string name="curFault_summary">Fault on system</string>
@@ -61,18 +61,26 @@
 	<string name="serialNumber_summary">Unique device serial number (hexa)</string>
 	<string name="serial_number_btn_send">SEND</string>
 
+	<string name="unblockSm_title">Unblock sm Main</string>
+	<string name="unblockSm_summary">Unblock the state machine when in SM_BATTERY_DEAD</string>
 
+	<string name="charger_current_high_title">Charger current HIGH limit</string>
+	<string name="charger_current_high_summary">Maximal current of charge [0.1A]</string>
+	<string name="charger_current_high_btn_send">SEND</string>
+
+	<string name="charger_current_low_title">Charger current LOW limit</string>
+	<string name="charger_current_low_summary">Minimal current of charge [0.1A]</string>
+	<string name="charger_current_low_btn_send">SEND</string>
 
 	<!--> System <!-->
 	<string name="turn_on">On</string>
 	<string name="turn_off">Off</string>
 	<string name="title_led_state">LED</string>
+	<string name="edit_message">Enter a message</string>
+
 
 	<string name="button_pressed">Pressed</string>
 	<string name="button_released">Released</string>
-
-	<string name="unblockSm_summary">Unknown</string>
-
 
 	<string name="location_permission_title">LOCATION PERMISSION REQUIRED</string>
 	<string name="location_permission_info">From Android 6.0 Marshmallow onwards the application requires Location permission in order to scan for Bluetooth Low Energy devices.

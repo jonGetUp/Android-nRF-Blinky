@@ -23,23 +23,32 @@
 package no.nordicsemi.android.blinky.profile.callback;
 
 import android.bluetooth.BluetoothDevice;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import no.nordicsemi.android.ble.callback.DataSentCallback;
 import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
 import no.nordicsemi.android.ble.data.Data;
 
 @SuppressWarnings("ConstantConditions")
-public abstract class balanceInWorkDataCallback implements ProfileDataCallback, EbikeBalanceInWorkCallback {    //Change
+public abstract class charger_current_lowDataCallback implements ProfileDataCallback, DataSentCallback, EBikeCharger_Current_LowCallback { //change
+
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-        if (data.size() != 1) {
+        parse(device, data);
+    }
+
+    @Override
+    public void onDataSent(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+        parse(device, data);
+    }
+
+    private void parse(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+        if (data.size() <= 2) {
+            final int sn = data.getIntValue(Data.FORMAT_UINT16, 0); //change
+            onCharger_Current_LowChanged(device, sn); //change
+        }else{
             onInvalidDataReceived(device, data);
-            Log.d("myTag", "wrong Size");
-            return;
         }
-        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);   //change
-        onBalanceInWorkChanged(device, state);  //change
     }
 }

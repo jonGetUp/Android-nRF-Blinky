@@ -221,6 +221,114 @@
 			</com.google.android.material.card.MaterialCardView>
 
 			<com.google.android.material.card.MaterialCardView
+				android:id="@+id/charger_current_high"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/activity_horizontal_margin">
+
+				<androidx.constraintlayout.widget.ConstraintLayout
+					android:layout_width="match_parent"
+					android:layout_height="match_parent">
+
+					<com.google.android.material.appbar.MaterialToolbar
+						android:id="@+id/charger_current_high_title"
+						android:layout_width="0dp"
+						android:layout_height="?actionBarSize"
+						app:layout_constraintLeft_toLeftOf="parent"
+						app:layout_constraintRight_toRightOf="parent"
+						app:layout_constraintTop_toTopOf="parent"
+						app:logo="@drawable/ic_toolbar_button"
+						app:title="@string/charger_current_high_title"
+						app:titleMarginStart="@dimen/toolbar_title_margin" />
+
+					<com.google.android.material.textview.MaterialTextView
+						android:id="@+id/charger_current_high_summary"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:paddingStart="@dimen/activity_horizontal_margin"
+						android:paddingEnd="@dimen/activity_horizontal_margin"
+						android:text="@string/charger_current_high_summary"
+						android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+						app:layout_constraintLeft_toLeftOf="parent"
+						app:layout_constraintTop_toBottomOf="@+id/charger_current_high_title" />
+
+					<EditText
+						android:id="@+id/charger_current_high_txt"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:ems="10"
+						android:hint="@string/unknown"
+						android:inputType="number"
+						android:maxLength="5"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toBottomOf="@+id/charger_current_high_summary" />
+
+					<Button
+						android:id="@+id/charger_current_high_btn"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="@string/charger_current_high_btn_send"
+						app:layout_constraintBaseline_toBaselineOf="@+id/charger_current_high_txt"
+						app:layout_constraintEnd_toEndOf="parent" />
+
+				</androidx.constraintlayout.widget.ConstraintLayout>
+			</com.google.android.material.card.MaterialCardView>
+
+			<com.google.android.material.card.MaterialCardView
+				android:id="@+id/charger_current_low"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/activity_horizontal_margin">
+
+				<androidx.constraintlayout.widget.ConstraintLayout
+					android:layout_width="match_parent"
+					android:layout_height="match_parent">
+
+					<com.google.android.material.appbar.MaterialToolbar
+						android:id="@+id/charger_current_low_title"
+						android:layout_width="0dp"
+						android:layout_height="?actionBarSize"
+						app:layout_constraintLeft_toLeftOf="parent"
+						app:layout_constraintRight_toRightOf="parent"
+						app:layout_constraintTop_toTopOf="parent"
+						app:logo="@drawable/ic_toolbar_button"
+						app:title="@string/charger_current_low_title"
+						app:titleMarginStart="@dimen/toolbar_title_margin" />
+
+					<com.google.android.material.textview.MaterialTextView
+						android:id="@+id/charger_current_low_summary"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:paddingStart="@dimen/activity_horizontal_margin"
+						android:paddingEnd="@dimen/activity_horizontal_margin"
+						android:text="@string/charger_current_low_summary"
+						android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+						app:layout_constraintLeft_toLeftOf="parent"
+						app:layout_constraintTop_toBottomOf="@+id/charger_current_low_title" />
+
+					<EditText
+						android:id="@+id/charger_current_low_txt"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:ems="10"
+						android:hint="@string/unknown"
+						android:inputType="number"
+						android:maxLength="5"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toBottomOf="@+id/charger_current_low_summary" />
+
+					<Button
+						android:id="@+id/charger_current_low_btn"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="@string/charger_current_low_btn_send"
+						app:layout_constraintBaseline_toBaselineOf="@+id/charger_current_low_txt"
+						app:layout_constraintEnd_toEndOf="parent" />
+
+				</androidx.constraintlayout.widget.ConstraintLayout>
+			</com.google.android.material.card.MaterialCardView>
+
+			<com.google.android.material.card.MaterialCardView
 				android:id="@+id/curFault"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -387,6 +495,60 @@
 			</com.google.android.material.card.MaterialCardView>
 
 			<com.google.android.material.card.MaterialCardView
+				android:id="@+id/unblockSm"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/activity_horizontal_margin">
+
+				<androidx.constraintlayout.widget.ConstraintLayout
+					android:layout_width="match_parent"
+					android:layout_height="match_parent">
+
+					<com.google.android.material.appbar.MaterialToolbar
+						android:id="@+id/unblockSm_title"
+						android:layout_width="0dp"
+						android:layout_height="?actionBarSize"
+						app:layout_constraintLeft_toLeftOf="parent"
+						app:layout_constraintRight_toRightOf="parent"
+						app:layout_constraintTop_toTopOf="parent"
+						app:logo="@drawable/ic_toolbar_lightbulb"
+						app:title="@string/unblockSm_title"
+						app:titleMarginStart="@dimen/toolbar_title_margin" />
+
+					<com.google.android.material.textview.MaterialTextView
+						android:id="@+id/unblockSm_summary"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:paddingStart="@dimen/activity_horizontal_margin"
+						android:paddingEnd="@dimen/activity_horizontal_margin"
+						android:text="@string/unblockSm_summary"
+						android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+						app:layout_constraintLeft_toLeftOf="parent"
+						app:layout_constraintTop_toBottomOf="@+id/unblockSm_title" />
+
+					<com.google.android.material.textview.MaterialTextView
+						android:id="@+id/unblockSm_state"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="8dp"
+						android:padding="@dimen/activity_horizontal_margin"
+						android:text="@string/turn_off"
+						android:textAllCaps="true"
+						android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+						app:layout_constraintLeft_toLeftOf="parent"
+						app:layout_constraintTop_toBottomOf="@+id/unblockSm_summary" />
+
+					<com.google.android.material.switchmaterial.SwitchMaterial
+						android:id="@+id/unblockSm_switch"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:padding="@dimen/activity_horizontal_margin"
+						app:layout_constraintBaseline_toBaselineOf="@+id/unblockSm_state"
+						app:layout_constraintEnd_toEndOf="parent" />
+				</androidx.constraintlayout.widget.ConstraintLayout>
+			</com.google.android.material.card.MaterialCardView>
+
+			<com.google.android.material.card.MaterialCardView
 				android:id="@+id/serialNumber"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -427,7 +589,7 @@
 						android:inputType="number"
 						android:maxLength="9"
 						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toBottomOf="@+id/serialNumber_summary" />
+						app:layout_constraintTop_toBottomOf="@+id/serialNumber_summary"/>
 
 					<Button
 						android:id="@+id/serialNumber_btn"
@@ -437,60 +599,6 @@
 						app:layout_constraintBaseline_toBaselineOf="@+id/serialNumber_txt"
 						app:layout_constraintEnd_toEndOf="parent" />
 
-				</androidx.constraintlayout.widget.ConstraintLayout>
-			</com.google.android.material.card.MaterialCardView>
-
-			<com.google.android.material.card.MaterialCardView
-				android:id="@+id/unblockSm"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="@dimen/activity_horizontal_margin">
-
-				<androidx.constraintlayout.widget.ConstraintLayout
-					android:layout_width="match_parent"
-					android:layout_height="match_parent">
-
-					<com.google.android.material.appbar.MaterialToolbar
-						android:id="@+id/unblockSm_title"
-						android:layout_width="0dp"
-						android:layout_height="?actionBarSize"
-						app:layout_constraintLeft_toLeftOf="parent"
-						app:layout_constraintRight_toRightOf="parent"
-						app:layout_constraintTop_toTopOf="parent"
-						app:logo="@drawable/ic_toolbar_lightbulb"
-						app:title="@string/title_led_state"
-						app:titleMarginStart="@dimen/toolbar_title_margin" />
-
-					<com.google.android.material.textview.MaterialTextView
-						android:id="@+id/unblockSm_summary"
-						android:layout_width="0dp"
-						android:layout_height="wrap_content"
-						android:paddingStart="@dimen/activity_horizontal_margin"
-						android:paddingEnd="@dimen/activity_horizontal_margin"
-						android:text="@string/unblockSm_summary"
-						android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-						app:layout_constraintLeft_toLeftOf="parent"
-						app:layout_constraintTop_toBottomOf="@+id/unblockSm_title" />
-
-					<com.google.android.material.textview.MaterialTextView
-						android:id="@+id/unblockSm_state"
-						android:layout_width="0dp"
-						android:layout_height="wrap_content"
-						android:layout_marginTop="8dp"
-						android:padding="@dimen/activity_horizontal_margin"
-						android:text="@string/turn_off"
-						android:textAllCaps="true"
-						android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-						app:layout_constraintLeft_toLeftOf="parent"
-						app:layout_constraintTop_toBottomOf="@+id/unblockSm_summary" />
-
-					<com.google.android.material.switchmaterial.SwitchMaterial
-						android:id="@+id/unblockSm_switch"
-						android:layout_width="0dp"
-						android:layout_height="wrap_content"
-						android:padding="@dimen/activity_horizontal_margin"
-						app:layout_constraintBaseline_toBaselineOf="@+id/unblockSm_state"
-						app:layout_constraintEnd_toEndOf="parent" />
 				</androidx.constraintlayout.widget.ConstraintLayout>
 			</com.google.android.material.card.MaterialCardView>
 

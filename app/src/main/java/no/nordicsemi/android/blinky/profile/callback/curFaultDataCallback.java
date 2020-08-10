@@ -40,10 +40,6 @@ public abstract class curFaultDataCallback implements ProfileDataCallback, Ebike
             return;
         }
         final int state = data.getIntValue(Data.FORMAT_UINT8, 0);   //change
-        if(state == 0)
-        {
-            Log.d("myTag", "receive 0");
-        }
         onCurFaultChanged(device, state);
     }
 }
